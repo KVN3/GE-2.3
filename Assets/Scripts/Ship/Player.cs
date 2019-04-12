@@ -5,23 +5,19 @@ using UnityEngine;
 
 #region Data Structs
 [System.Serializable]
-public struct PlayerData
+public struct PlayerConfig
 {
-    // Movement
-    public float forwardSpeed;
-    public float sideMovementSpeed;
-    public float rotationSpeed;
+    public float movementSpeedFactor;
+    public float rotationSpeedFactor;
 
-    // Floating
+    public float maxSpeed;
+}
+
+[System.Serializable]
+public struct PlayerFloatConfig
+{
     public float topBound, bottomBound;
     public float floatSpeed;
-
-    // Extra
-    public float charges;
-    public float score;
-
-    // Calculated
-    public float initialAngleY;
 }
 
 [System.Serializable]
@@ -38,11 +34,17 @@ public struct PlayerRunData
     public int currentLap;
     public int maxLaps;
     public TimeSpan raceTime;
-
     public List<TimeSpan> raceTimes;
 
     public bool raceFinished;
 
+    // Calculated
+    public float initialAngleY;
+    public float currentSpeed;
+
+    // Extra
+    public float charges;
+    public float score;
 }
 #endregion
 
@@ -51,7 +53,8 @@ public class Player : MonoBehaviour
 {
     #region Initialize and Assign Variables
     //public BulletData bulletData;
-    public PlayerData playerData;
+    public PlayerConfig config;
+    public PlayerFloatConfig floatConfig;
     public PlayerRunData runData;
     public Engines shipEngines;
 
@@ -65,13 +68,11 @@ public class Player : MonoBehaviour
     private bool upperBoundReached = false;
     private bool bottomBoundReached = true;
 
-    public float currentSpeed;
-
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
 
-        playerData.initialAngleY = transform.rotation.eulerAngles.y;
+        runData.initialAngleY = transform.rotation.eulerAngles.y;
 
         // Engines off at start
         shipEngines.middleEngine.Deactivate();
@@ -88,147 +89,73 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Movement
-
-    public void Move(Vector3 force, float verticalInput)
-    {
-
-    }
-
-    public void PMove(Vector3 force, float verticalInput, float horizontalInput)
+    public void Move(Vector3 force, float verticalInput, float horizontalInput)
     {
         Rigidbody rb = this.GetComponent<Rigidbody>();
-        //Debug.Log(rb.velocity.x + " " + rb.velocity.y + " " + rb.velocity.z);
+        Vector3 vel = rb.velocity;
+        Vector3 localVel = transform.InverseTransformVector(vel);
 
-        // Turning right
-        if (horizontalInput > 0f || horizontalInput < 0f)
-        {
-            //Vector3 velocity = rb.velocity;
-            //rb.velocity = new Vector3(velocity.x, velocity.y, velocity.z);
+        float currSpeed = 0;
 
-            rb.velocity = (rb.velocity / 1.025f);
-            //Debug.Log(transform.right);
-        }
-
-
-        if (GivingGas(verticalInput))
-        {
-            shipEngines.middleEngine.Activate();
-
-            if (!Input.GetKey(KeyCode.Space))
-            {
-                if (rb.drag > 0)
-                    rb.drag -= 0.6f;
-
-                if (rb.angularDrag > 0)
-                    rb.angularDrag -= 0.2f;
-
-                if (rb.drag < 0)
-                    rb.drag = 0;
-
-                //if (rb.angularDrag < 0)
-                //    rb.angularDrag = 0;
-            }
-        }
-
-        // Not giving gas, increase drag
+        if (localVel.z < 0)
+            currSpeed = -localVel.z;
         else
+            currSpeed = localVel.z;
+
+        runData.currentSpeed = currSpeed;
+        Debug.Log("Vehicle speed = " + runData.currentSpeed);
+
+        if (runData.currentSpeed >= config.maxSpeed)
         {
-            shipEngines.middleEngine.Deactivate();
-
-            if (!Input.GetKey(KeyCode.Space))
-            {
-                if (rb.drag < maxDrag)
-                {
-                    float slowDownFactor = initialSlowDownFactor;
-                    if (rb.drag >= 1)
-                        slowDownFactor *= rb.drag;
-
-                    rb.drag += slowDownFactor;
-                }
-
-
-                //if (rb.angularDrag < maxDrag)
-                //    rb.angularDrag += 0.1f;
-            }
+            force = Vector3.zero;
         }
 
-        // Float up
-        if (ShouldFloatUp())
-        {
-            force.y = playerData.floatSpeed;
-        }
-        // Float down
-        else if (ShouldFloatDown())
-        {
-            force.y = -playerData.floatSpeed;
-        }
+        // Apply drag
+        ManageDrag(verticalInput, horizontalInput, rb);
+
+        // Apply floating
+        force.y = ApplyFloating();
+
+        //if (horizontalInput > 0f || horizontalInput < 0f)
+        //rb.velocity = (rb.velocity / 1.025f);
+
 
         rb.AddForce(force);
     }
 
-    private bool ShouldFloatUp()
-    {
-        if (transform.position.y < playerData.topBound)
-        {
-            if (!upperBoundReached)
-            {
-                return true;
-            }
-
-        }
-
-        bottomBoundReached = false;
-        upperBoundReached = true;
-        return false;
-    }
-
-    private bool ShouldFloatDown()
-    {
-        if (transform.position.y > playerData.bottomBound)
-        {
-            if (upperBoundReached)
-            {
-                return true;
-            }
-        }
-
-        bottomBoundReached = true;
-        upperBoundReached = false;
-        return false;
-    }
-
     public void Rotate(Vector3 acceleration, float horizontalInput)
     {
-        // Rotation resets automatically after buttons released
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(acceleration), Time.deltaTime * playerData.rotationSpeed);
+        ManageEngines(horizontalInput);
+        Rigidbody b = GetComponent<Rigidbody>();
+        Vector3 vel = b.velocity;
+        Vector3 vel2 = b.velocity;
+        Vector3 localVel = transform.InverseTransformVector(vel);
 
-        Rigidbody rb = this.GetComponent<Rigidbody>();
-
-        // Regular rotation
-        if (horizontalInput > 0)
-        {
-            shipEngines.leftEngine.Activate();
-            shipEngines.rightEngine.Deactivate();
-        }
-        else if (horizontalInput < 0)
-        {
-            shipEngines.rightEngine.Activate();
-            shipEngines.leftEngine.Deactivate();
-        }
-        else
-        {
-            shipEngines.leftEngine.Deactivate();
-            shipEngines.rightEngine.Deactivate();
-        }
+        Vector3 localVel2 = transform.InverseTransformVector(vel2);   // Transform worldspace vel naar local space
 
         transform.Rotate(acceleration);
 
+        localVel2.x = Mathf.Lerp(localVel2.x, 0.0f, Time.deltaTime * 10);
 
-        //Rigidbody rb = this.GetComponent<Rigidbody>();
-        //rb.AddTorque(acceleration);
+        localVel2.y = Mathf.Lerp(localVel2.y, 0.0f, Time.deltaTime * 10);
+
+        vel = transform.TransformVector(localVel);  // Transform terug naar worldspace
+
+        b.velocity = vel;
+
+        //Rigidbody rb = GetComponent<Rigidbody>();
+
+        //Vector3 vel = rb.velocity;
+        //Vector3 localVel = transform.InverseTransformVector(vel);     // Transform worldspace vel naar local space
+
+        //// Je local vel zou nu vooral op de Z as hoog moeten zijn
+        //transform.Rotate(acceleration);
+
+        //vel = transform.TransformVector(localVel);      // Transform terug naar worldspace
+        //rb.velocity = vel;    
     }
 
-    public void PBreak()
+    public void Break()
     {
         Rigidbody rb = this.GetComponent<Rigidbody>();
 
@@ -284,11 +211,114 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void ManageDrag(float verticalInput, float horizontalInput, Rigidbody rb)
+    {
+        if (GivingGas(verticalInput))
+        {
+            shipEngines.middleEngine.Activate();
+
+            if (!Input.GetKey(KeyCode.Space))
+            {
+                if (rb.drag > 0)
+                    rb.drag -= 0.6f;
+
+                if (rb.angularDrag > 0)
+                    rb.angularDrag -= 0.2f;
+
+                if (rb.drag < 0)
+                    rb.drag = 0;
+            }
+        }
+
+        // Not giving gas, increase drag
+        else
+        {
+            shipEngines.middleEngine.Deactivate();
+
+            if (!Input.GetKey(KeyCode.Space))
+            {
+                if (rb.drag < maxDrag)
+                {
+                    float slowDownFactor = initialSlowDownFactor;
+                    if (rb.drag >= 1)
+                        slowDownFactor *= rb.drag;
+
+                    rb.drag += slowDownFactor;
+                }
+            }
+        }
+    }
+
+    private void ManageEngines(float horizontalInput)
+    {
+        if (horizontalInput > 0)
+        {
+            shipEngines.leftEngine.Activate();
+            shipEngines.rightEngine.Deactivate();
+        }
+        else if (horizontalInput < 0)
+        {
+            shipEngines.rightEngine.Activate();
+            shipEngines.leftEngine.Deactivate();
+        }
+        else
+        {
+            shipEngines.leftEngine.Deactivate();
+            shipEngines.rightEngine.Deactivate();
+        }
+    }
+
     private bool GivingGas(float verticalInput)
     {
         if (verticalInput > 0)
             return true;
 
+        return false;
+    }
+    #endregion
+
+    #region Floating
+    private float ApplyFloating()
+    {
+        float floatSpeed = 0;
+
+        if (ShouldFloatUp())
+            floatSpeed = floatConfig.floatSpeed;
+        else if (ShouldFloatDown())
+            floatSpeed = -floatConfig.floatSpeed;
+
+        if (floatSpeed == 0)
+            Debug.Log("Error... floatSpeed = 0");
+
+        return floatSpeed;
+    }
+    private bool ShouldFloatUp()
+    {
+        if (transform.position.y < floatConfig.topBound)
+        {
+            if (!upperBoundReached)
+            {
+                return true;
+            }
+
+        }
+
+        bottomBoundReached = false;
+        upperBoundReached = true;
+        return false;
+    }
+    private bool ShouldFloatDown()
+    {
+        if (transform.position.y > floatConfig.bottomBound)
+        {
+            if (upperBoundReached)
+            {
+                return true;
+            }
+        }
+
+        bottomBoundReached = true;
+        upperBoundReached = false;
         return false;
     }
     #endregion
@@ -350,7 +380,7 @@ public class Player : MonoBehaviour
 
                 // Add a lap
                 runData.currentLap++;
-                
+
             }
         }
     }
@@ -361,12 +391,12 @@ public class Player : MonoBehaviour
 
 
 // Apply boundaries
-//if (transform.position.x > playerData.rightBound && force.x > 0)
+//if (transform.position.x > PlayerConfig.rightBound && force.x > 0)
 //{
 //    rb.velocity = new Vector3(0f, force.y, force.z);
 //}
 
-//else if (transform.position.x < playerData.leftBound && force.x < 0)
+//else if (transform.position.x < PlayerConfig.leftBound && force.x < 0)
 //{
 //    rb.velocity = new Vector3(0f, force.y, force.z);
 //}
@@ -392,7 +422,7 @@ public class Player : MonoBehaviour
 //        correctedInput = verticalInput * -1;
 //    }
 
-//    Vector3 forward = correctedInput * transform.forward * Time.deltaTime * playerData.forwardSpeed;
+//    Vector3 forward = correctedInput * transform.forward * Time.deltaTime * PlayerConfig.movementSpeedFactor;
 
 
 //    rb.AddRelativeForce(forward);

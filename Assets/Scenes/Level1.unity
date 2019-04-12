@@ -5897,6 +5897,76 @@ PrefabInstance:
       propertyPath: playerData.floatSpeed
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: playerData.forwardMovement
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: playerData.rotationMovement
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: playerData.maxSpeed
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.forwardMovement
+      value: 20000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.rotationMovement
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.maxSpeed
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.topBound
+      value: -2.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.bottomBound
+      value: -3.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.floatSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: floatConfig.topBound
+      value: -2.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: floatConfig.bottomBound
+      value: -3.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: floatConfig.floatSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.movementSpeedFactor
+      value: 20000
+      objectReference: {fileID: 0}
+    - target: {fileID: 8740331887454732047, guid: e777bc33e51fcb049816683cf0be2076,
+        type: 3}
+      propertyPath: config.rotationSpeedFactor
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8678655557485067629, guid: e777bc33e51fcb049816683cf0be2076,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5955,7 +6025,7 @@ PrefabInstance:
     - target: {fileID: 1970184437782635284, guid: e777bc33e51fcb049816683cf0be2076,
         type: 3}
       propertyPath: useAccelerometerControls
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5806165174151346942, guid: e777bc33e51fcb049816683cf0be2076,
         type: 3}

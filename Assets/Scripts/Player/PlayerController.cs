@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
         // Breaking
         if (Input.GetKey(KeyCode.Space))
-            player.PBreak();
+            player.Break();
 
         // Controls
         if (Input.GetKeyDown(KeyCode.C))
@@ -68,12 +68,13 @@ public class PlayerController : MonoBehaviour
     private void ApplyMovement(float horizontalInput, float verticalInput, float forwardFactor, float rotationalFactor)
     {
         // Rotation
-        float y = horizontalInput * player.playerData.rotationSpeed * rotationalFactor;
+        float y = horizontalInput * player.config.rotationSpeedFactor * rotationalFactor;
+        Debug.Log(y);
         player.Rotate(new Vector3(0f, y), horizontalInput);
 
         // Thrust
-        Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * player.playerData.forwardSpeed * forwardFactor;
-        player.PMove(forward, verticalInput, horizontalInput);
+        Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * player.config.movementSpeedFactor * forwardFactor;
+        player.Move(forward, verticalInput, horizontalInput);
     }
 
     //private void HandleShooting()
@@ -84,15 +85,15 @@ public class PlayerController : MonoBehaviour
 }
 
 
-////float movement = Time.deltaTime * player.playerData.sideMovementSpeed;
+////float movement = Time.deltaTime * player.PlayerConfig.sideMovementSpeed;
 ////float x = Input.GetAxis("Horizontal") * movement;
 ////float y = Input.GetAxis("Vertical") * movement;
 
 //// Rotation
-//float y = Input.GetAxis("Horizontal") * player.playerData.rotationSpeed;
+//float y = Input.GetAxis("Horizontal") * player.PlayerConfig.rotationSpeedFactor;
 //player.Rotate(new Vector3(0f, y));
 
 //// Movement
-//player.PMove(new Vector3(0f, 0f, 0f));
+//player.Move(new Vector3(0f, 0f, 0f));
 
-////transform.position += transform.forward * Time.deltaTime * player.playerData.sideMovementSpeed;
+////transform.position += transform.forward * Time.deltaTime * player.PlayerConfig.sideMovementSpeed;
