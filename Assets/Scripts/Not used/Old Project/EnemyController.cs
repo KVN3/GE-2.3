@@ -63,6 +63,6 @@ public class EnemyController : MonoBehaviour
     // Methods
     private Vector3 FindTarget()
     {
-        return enemy.player.transform.position;
+        return enemy.PlayerShip.transform.position;
     }
 }

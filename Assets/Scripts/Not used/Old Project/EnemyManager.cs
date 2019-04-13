@@ -5,7 +5,7 @@ using UnityEngine.Assertions;
 
 public class EnemyManager : MonoBehaviour
 {
-    public Player player;
+    public PlayerShip PlayerShip;
     public Enemy[] enemyClasses;
     public int desiredAliveEnemyCount;
 
@@ -41,7 +41,7 @@ public class EnemyManager : MonoBehaviour
         pos.y = 5;
 
         Enemy enemy = Instantiate(enemyClass, pos, Quaternion.identity);
-        enemy.player = player;
+        enemy.PlayerShip = PlayerShip;
         //enemy.bullets = bullets;
 
         enemies.Add(enemy);

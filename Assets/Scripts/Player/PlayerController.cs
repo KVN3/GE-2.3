@@ -11,7 +11,7 @@ public struct Cameras
 
 public class PlayerController : MonoBehaviour
 {
-    public Player player;
+    public PlayerShip playerShip;
     public Accelerometer accelerometer;
     public Cameras cameras;
 
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
         // Breaking
         if (Input.GetKey(KeyCode.Space))
-            player.Break();
+            playerShip.Break();
 
         // Controls
         if (Input.GetKeyDown(KeyCode.C))
@@ -67,33 +67,33 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement(float horizontalInput, float verticalInput, float forwardFactor, float rotationalFactor)
     {
+        // Engines & Drag
+        if (GivingGas(verticalInput) && !Input.GetKey(KeyCode.Space))
+            playerShip.GivingGas();
+        else if (!Input.GetKey(KeyCode.Space))
+            playerShip.NotGivingGas();
+
         // Rotation
-        float y = horizontalInput * player.config.rotationSpeedFactor * rotationalFactor;
+        float y = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
         Debug.Log(y);
-        player.Rotate(new Vector3(0f, y), horizontalInput);
+        playerShip.Rotate(new Vector3(0f, y), horizontalInput);
 
         // Thrust
-        Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * player.config.movementSpeedFactor * forwardFactor;
-        player.Move(forward, verticalInput, horizontalInput);
+        Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.config.movementSpeedFactor * forwardFactor;
+        playerShip.Move(forward, verticalInput, horizontalInput);
+    }
+
+    private bool GivingGas(float verticalInput)
+    {
+        if (verticalInput > 0)
+            return true;
+
+        return false;
     }
 
     //private void HandleShooting()
     //{
     //    if (Input.GetButtonDown("Fire1"))
-    //        player.Shoot();
+    //        playerShip.Shoot();
     //}
 }
-
-
-////float movement = Time.deltaTime * player.PlayerConfig.sideMovementSpeed;
-////float x = Input.GetAxis("Horizontal") * movement;
-////float y = Input.GetAxis("Vertical") * movement;
-
-//// Rotation
-//float y = Input.GetAxis("Horizontal") * player.PlayerConfig.rotationSpeedFactor;
-//player.Rotate(new Vector3(0f, y));
-
-//// Movement
-//player.Move(new Vector3(0f, 0f, 0f));
-
-////transform.position += transform.forward * Time.deltaTime * player.PlayerConfig.sideMovementSpeed;

@@ -30,8 +30,8 @@ public class SpawnManager : MonoBehaviour
     private List<Asteroid> asteroids;
     private List<Battery> batteries;
 
-    // player ship object
-    public Player player;
+    // playerShip ship object
+    public PlayerShip PlayerShip;
 
     void Start()
     {
@@ -125,14 +125,14 @@ public class SpawnManager : MonoBehaviour
     {
         Vector3 pos = new Vector3();
 
-        // Based on player pos
-        //float playerX = player.transform.position.x;
+        // Based on playerShip pos
+        //float playerX = playerShip.transform.position.x;
         //pos.x = Random.Range(playerX - 30f, playerX + 30f);
 
         // Set bounds
         pos.x = Random.Range(-35f, 35f);
 
-        pos.z = player.transform.position.z - Random.Range(200, 300);
+        pos.z = PlayerShip.transform.position.z - Random.Range(200, 300);
         pos.y = 0;
 
         return pos;

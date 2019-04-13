@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
-    public Player player;
+    public PlayerShip PlayerShip;
     public float maxForce;
     //public Bullet[] bullets;
     public Vector3 moveDirection;

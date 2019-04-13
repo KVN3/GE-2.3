@@ -20,10 +20,19 @@ public class Booster : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("booted & boosted");
-
         Rigidbody rb = other.GetComponent<Rigidbody>();
-        Vector3 newVelocity = new Vector3(rb.velocity.x * boostFactor, rb.velocity.y, rb.velocity.z * boostFactor);
-        rb.velocity = newVelocity;
+        if (other.gameObject.CompareTag("Ship"))
+        {
+            PlayerShip playerShip = other.GetComponent<PlayerShip>();
+            float maxSpeed = playerShip.config.maxSpeed;
+
+            if (playerShip.currentSpeed < maxSpeed)
+            {
+                Vector3 newVelocity =
+                    new Vector3(rb.velocity.x * boostFactor, rb.velocity.y, rb.velocity.z * boostFactor);
+
+                rb.velocity = newVelocity;
+            }
+        }
     }
 }

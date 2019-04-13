@@ -8,7 +8,7 @@ public class UIManager : LevelSingleton<UIManager>, ISubject
 {
     private List<IObserver> observers = new List<IObserver>();
 
-    public Player player;
+    public PlayerShip playerShip;
 
     public HUD HUDClass;
 
@@ -22,7 +22,7 @@ public class UIManager : LevelSingleton<UIManager>, ISubject
     {
         // Create HUD
         HUD Hud = Spawn(HUDClass, this, (HUD HUD) => {
-            HUD.player = player;
+            HUD.playerShip = playerShip;
         });
     }
 

@@ -21,7 +21,7 @@ public struct AttachableScripts
 
 public class GameState : MonoBehaviour
 {
-    public Player player;
+    public PlayerShip playerShip;
 
     public GameManagers gameManagers;
     public Waypoint wp;
@@ -41,7 +41,7 @@ public class GameState : MonoBehaviour
 
         //UIManager
         UIManager UIManager = Instantiate(gameManagers.UIManagerClass);
-        UIManager.player = player;
+        UIManager.playerShip = playerShip;
 
         // Asteroid Storm Manager
         if (difficulty > 0)
@@ -54,8 +54,8 @@ public class GameState : MonoBehaviour
     private void Update()
     {
         // Adds to the laptime based on Time.DeltaTime (A second / fps)
-        if (!player.runData.raceFinished)
-            player.runData.raceTime = player.runData.raceTime.Add(System.TimeSpan.FromSeconds(1 * Time.deltaTime));
+        if (!playerShip.runData.raceFinished)
+            playerShip.runData.raceTime = playerShip.runData.raceTime.Add(System.TimeSpan.FromSeconds(1 * Time.deltaTime));
 
         // Restart, gets particle error tho
         if (Input.GetKeyDown(KeyCode.R))

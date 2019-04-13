@@ -7,14 +7,14 @@ using UnityEngine.UI;
 
 public class HUD : MyMonoBehaviour, IObserver
 {
-    public Player player { get; set; }
+    public PlayerShip playerShip { get; set; }
 
     Animator Anim;
 
 
     // Start is called before the first frame update
     void Awake() {
-		Assert.IsNotNull(player);
+		Assert.IsNotNull(playerShip);
 
         Anim = GetComponent<Animator>();
     }
@@ -22,7 +22,7 @@ public class HUD : MyMonoBehaviour, IObserver
     // Update is called once per frame
     void Update()
     {
-        if (player.runData.raceFinished)
+        if (playerShip.runData.raceFinished)
             Anim.SetTrigger("RaceFinished");
     }
 

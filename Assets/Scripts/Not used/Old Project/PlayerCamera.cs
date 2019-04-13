@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public Player target;
+    public PlayerShip target;
 
     public Vector3 targetMovementOffset;
     public Vector3 targetLookAtOffset;
