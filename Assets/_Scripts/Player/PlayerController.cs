@@ -67,15 +67,27 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement(float horizontalInput, float verticalInput, float forwardFactor, float rotationalFactor)
     {
+        MovementState sideMovementState = Movement.GetMovementState(horizontalInput, MovementType.SIDE);
+
         // Engines & Drag
+        playerShip.ManageEngines(horizontalInput);
+
         if (GivingGas(verticalInput) && !Input.GetKey(KeyCode.Space))
             playerShip.GivingGas();
         else if (!Input.GetKey(KeyCode.Space))
             playerShip.NotGivingGas();
 
         // Rotation
-        float y = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
-        playerShip.Rotate(new Vector3(0f, y), horizontalInput);
+        if (Movement.IsNotIdle(sideMovementState))
+        {
+            float y = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
+            float z = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
+            playerShip.Rotate(new Vector3(0f, y, z), horizontalInput, sideMovementState);
+        }
+        else
+        {
+            playerShip.ResetAngleZ(1);
+        }
 
         // Thrust
         Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.config.movementSpeedFactor * forwardFactor;
@@ -89,10 +101,4 @@ public class PlayerController : MonoBehaviour
 
         return false;
     }
-
-    //private void HandleShooting()
-    //{
-    //    if (Input.GetButtonDown("Fire1"))
-    //        playerShip.Shoot();
-    //}
 }

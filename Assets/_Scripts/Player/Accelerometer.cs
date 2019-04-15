@@ -51,7 +51,7 @@ public class Accelerometer : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Serial transmission is malformed.");
+            //Debug.Log("Serial transmission is malformed.");
             return Vector3.zero;
         }
     }

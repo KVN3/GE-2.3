@@ -18,7 +18,7 @@ public struct ShipConfig
 [System.Serializable]
 public struct ShipFloatConfig
 {
-    public float topBound, bottomBound;
+    public float floatDiff;
     public float floatSpeed;
 }
 
@@ -40,11 +40,16 @@ public class Ship : MonoBehaviour
     public float currentSpeed;
 
     // Private run data
+    private float floatTopBound, floatBottomBound;
     private bool upperBoundReached = false;
 
     public virtual void Start()
     {
         config.initialAngleY = transform.rotation.eulerAngles.y;
+
+        // Set float bounds
+        floatTopBound = transform.position.y + floatConfig.floatDiff;
+        floatBottomBound = transform.position.y - floatConfig.floatDiff;
 
         // Engines off at start
         TurnOffAllEngines();
@@ -141,67 +146,57 @@ public class Ship : MonoBehaviour
     #endregion
 
     #region Rotation
-    public void Rotate(Vector3 acceleration, float horizontalInput)
+    public void Rotate(Vector3 acceleration, float horizontalInput, MovementState sideMovementState)
     {
-        ManageEngines(horizontalInput);
-        Rigidbody b = GetComponent<Rigidbody>();
-        Vector3 vel = b.velocity;
-        Vector3 vel2 = b.velocity;
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        // Worldspace Vel -> Local Vel
+        Vector3 vel = rb.velocity;
         Vector3 localVel = transform.InverseTransformVector(vel);
 
-        Vector3 localVel2 = transform.InverseTransformVector(vel2);   // Transform worldspace vel naar local space
+        // Rotate
+        float x = transform.localEulerAngles.x;
+        float y = transform.localEulerAngles.y + acceleration.y;
+        float z = GetAngleZ(sideMovementState, acceleration.z);
+        transform.localEulerAngles = new Vector3(x, y, z);
 
-        transform.Rotate(acceleration);
-
-        localVel2.x = Mathf.Lerp(localVel2.x, 0.0f, Time.deltaTime * 10);
-
-        localVel2.y = Mathf.Lerp(localVel2.y, 0.0f, Time.deltaTime * 10);
-
-        vel = transform.TransformVector(localVel);  // Transform terug naar worldspace
-
-        b.velocity = vel;
-
-        //Rigidbody rb = GetComponent<Rigidbody>();
-
-        //Vector3 vel = rb.velocity;
-        //Vector3 localVel = transform.InverseTransformVector(vel);     // Transform worldspace vel naar local space
-
-        //// Je local vel zou nu vooral op de Z as hoog moeten zijn
-        //transform.Rotate(acceleration);
-
-        //vel = transform.TransformVector(localVel);      // Transform terug naar worldspace
-        //rb.velocity = vel;    
+        // Local Vel -> Worldspace Vel
+        vel = transform.TransformVector(localVel); 
+        rb.velocity = vel;
     }
 
-    public void SetAngle(Rigidbody rb)
+    public void ResetAngleZ(float addValue)
     {
-        float feloX = rb.velocity.x;
+        float angleZ = transform.localEulerAngles.z;
 
-        if (feloX > 0)
+        if (angleZ > 3 && angleZ <= 180)
         {
-            if (!(transform.rotation.eulerAngles == new Vector3(0, 0, 25)))
-            {
-                transform.Rotate(0, 0, 25);
-            }
-
+            transform.Rotate(0f, 0f, -addValue);
         }
-        else if (feloX < 0)
+        else if (angleZ <= 357 && angleZ > 180)
         {
-            if (!(transform.rotation.eulerAngles == new Vector3(0, 0, -25)))
-            {
-                transform.Rotate(0, 0, -25);
-            }
-        }
-        else if (feloX == 0)
-        {
-            transform.Rotate(0, 0, -25);
-        }
-
-        if (feloX == 0)
-        {
-
+            transform.Rotate(0f, 0f, addValue);
         }
     }
+
+    private float GetAngleZ(MovementState sideMovementState, float addValue)
+    {
+        float angleZ = transform.localEulerAngles.z;
+
+        float z = transform.localEulerAngles.z;
+
+        if ((angleZ < 20 || angleZ > 300) && sideMovementState.Equals(MovementState.RIGHT))
+        {
+            z = z + addValue;
+        }
+        else if ((angleZ > 340 || angleZ <= 50) && sideMovementState.Equals(MovementState.LEFT))
+        {
+            z = z + addValue;
+        }
+
+        return z;
+    }
+
     #endregion
 
     #region Engines
@@ -212,7 +207,7 @@ public class Ship : MonoBehaviour
         shipEngines.rightEngine.Deactivate();
     }
 
-    private void ManageEngines(float horizontalInput)
+    public void ManageEngines(float horizontalInput)
     {
         if (horizontalInput > 0)
         {
@@ -238,7 +233,7 @@ public class Ship : MonoBehaviour
         float floatSpeed = 0;
 
         if (ShouldFloatUp())
-            floatSpeed = floatConfig.floatSpeed;         
+            floatSpeed = floatConfig.floatSpeed;
         else if (ShouldFloatDown())
             floatSpeed = -floatConfig.floatSpeed;
 
@@ -252,28 +247,28 @@ public class Ship : MonoBehaviour
 
     private void ApplyFloatingBounds()
     {
-        float diff = Mathf.Round((floatConfig.topBound - floatConfig.bottomBound) * 10) / 10;
+        float diff = Mathf.Round((floatTopBound - floatBottomBound) * 10) / 10;
 
-        if (transform.position.y < (floatConfig.bottomBound - diff))
+        if (transform.position.y < (floatBottomBound - diff))
         {
-            transform.position = new Vector3(transform.position.x, floatConfig.bottomBound, transform.position.z);
+            transform.position = new Vector3(transform.position.x, floatBottomBound, transform.position.z);
         }
-        else if (transform.position.y > (floatConfig.topBound + diff))
+        else if (transform.position.y > (floatTopBound + diff))
         {
-            transform.position = new Vector3(transform.position.x, floatConfig.topBound, transform.position.z);
+            transform.position = new Vector3(transform.position.x, floatTopBound, transform.position.z);
         }
     }
 
     private float GetHeightMiddle()
     {
-        float diff = floatConfig.topBound - floatConfig.bottomBound;
-        float middleHeight = floatConfig.topBound - (diff / 2);
+        float diff = floatTopBound - floatBottomBound;
+        float middleHeight = floatTopBound - (diff / 2);
         return middleHeight;
     }
 
     private bool ShouldFloatUp()
     {
-        if (transform.position.y < floatConfig.topBound)
+        if (transform.position.y < floatTopBound)
         {
             if (!upperBoundReached)
             {
@@ -287,7 +282,7 @@ public class Ship : MonoBehaviour
     }
     private bool ShouldFloatDown()
     {
-        if (transform.position.y > floatConfig.bottomBound)
+        if (transform.position.y > floatBottomBound)
         {
             if (upperBoundReached)
             {

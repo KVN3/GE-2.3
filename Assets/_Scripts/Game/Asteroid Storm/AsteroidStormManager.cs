@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public enum Direction
-{
-    X,
-    Y,
-    Z
-}
-
-
 public class AsteroidStormManager : MonoBehaviour
 {
     public int desiredAsteroidCount;
