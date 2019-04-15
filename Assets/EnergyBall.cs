@@ -7,11 +7,11 @@ using UnityEngine.SceneManagement;
 public class EnergyBall : MonoBehaviour
 {
     private AudioSource audioSource;
-    public AudioClip chargesZappedSound;
+    public AudioClip chargesZappedClip;
 
     public void Start()
     {
-        Assert.IsNotNull(chargesZappedSound);
+        Assert.IsNotNull(chargesZappedClip);
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -20,7 +20,7 @@ public class EnergyBall : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ship"))
         {
-            audioSource.clip = chargesZappedSound;
+            audioSource.clip = chargesZappedClip;
             audioSource.Play();
 
             Rigidbody rb = other.GetComponent<Rigidbody>();

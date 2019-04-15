@@ -30,7 +30,7 @@ public class PlayerShip : Ship
     public PlayerRunData runData;
     
     private AudioSource audioSource;
-    public AudioClip alarmSound;
+    public AudioClip alarmClip;
 
     public override void Start()
     {
@@ -53,7 +53,7 @@ public class PlayerShip : Ship
     {
         if (!other.gameObject.CompareTag("OuterWall"))
         {
-            audioSource.clip = alarmSound;
+            audioSource.clip = alarmClip;
             audioSource.Play();
         }
     }
