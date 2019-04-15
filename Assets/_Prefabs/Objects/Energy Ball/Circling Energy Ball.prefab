@@ -123,7 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e6ed94d7b1ce6341b8bfc64c4664818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargesZappedSound: {fileID: 8300000, guid: 78a8ebce9c0169740a0eebb008049706, type: 3}
+  chargesZappedClip: {fileID: 8300000, guid: 78a8ebce9c0169740a0eebb008049706, type: 3}
 --- !u!114 &7903553556143086117
 MonoBehaviour:
   m_ObjectHideFlags: 0

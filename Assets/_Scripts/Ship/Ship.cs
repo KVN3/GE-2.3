@@ -8,7 +8,8 @@ public struct ShipConfig
     public float movementSpeedFactor;
     public float rotationSpeedFactor;
 
-    public float maxSpeed;
+    public float baseMaxSpeed;
+    public float minDrag;
     public float maxDrag;
 
     public float initialAngleY;
@@ -43,8 +44,11 @@ public class Ship : MonoBehaviour
     private float floatTopBound, floatBottomBound;
     private bool upperBoundReached = false;
 
+    public float currentMaxSpeed;
+
     public virtual void Start()
     {
+        currentMaxSpeed = config.baseMaxSpeed;
         config.initialAngleY = transform.rotation.eulerAngles.y;
 
         // Set float bounds
@@ -69,25 +73,25 @@ public class Ship : MonoBehaviour
         // Apply floating
         force.y = ApplyFloating();
 
-        if (currentSpeed < config.maxSpeed)
+        if (currentSpeed < currentMaxSpeed)
         {
             rb.AddForce(force);
         }
         else
         {
             Vector3 newLocalVel = localVel;
-            newLocalVel.z = config.maxSpeed;
+            newLocalVel.z = currentMaxSpeed;
 
             if (localVel.z < 0)
                 newLocalVel.z *= -1;
 
             rb.velocity = transform.TransformVector(newLocalVel);
 
-            // Keep floating, but don't increase...
+            // Keep floating, but don't increase speed...
             rb.AddForce(0, force.y, 0);
         }
 
-        //Debug.Log("Vehicle speed (" + localVel.z + ") = " + currentSpeed);
+        Debug.Log("Vehicle speed (" + localVel.z + ") = " + currentSpeed + " MAX = " + currentMaxSpeed);
     }
 
     public float GetCurrentSpeed(Vector3 vel)
@@ -107,14 +111,14 @@ public class Ship : MonoBehaviour
 
         shipEngines.middleEngine.Activate();
 
-        if (rb.drag > 0)
-            rb.drag -= 0.6f;
+        if (rb.drag > config.minDrag)
+            rb.drag -= 0.3f;
 
         if (rb.angularDrag > 0)
             rb.angularDrag -= 0.2f;
 
-        if (rb.drag < 0)
-            rb.drag = 0;
+        if (rb.drag < config.minDrag)
+            rb.drag = config.minDrag;
     }
 
     public void NotGivingGas()
@@ -239,8 +243,8 @@ public class Ship : MonoBehaviour
 
         ApplyFloatingBounds();
 
-        if (floatSpeed == 0)
-            Debug.Log("Error... floatSpeed = 0");
+        //if (floatSpeed == 0)
+        //    Debug.Log("Error... floatSpeed = 0");
 
         return floatSpeed;
     }
@@ -299,3 +303,6 @@ public class Ship : MonoBehaviour
 
     #endregion
 }
+
+// TO DO: camera straight while turning
+// TO DO: temporary increase of air drag while turning (big question mark)
