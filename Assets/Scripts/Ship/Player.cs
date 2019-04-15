@@ -19,6 +19,7 @@ public struct PlayerData
     // Extra
     public float charges;
     public float score;
+    public TimeSpan bestRaceTime;
 
     // Calculated
     public float initialAngleY;
@@ -38,6 +39,7 @@ public struct PlayerRunData
     public int currentLap;
     public int maxLaps;
     public TimeSpan raceTime;
+    public TimeSpan totalTime;
 
     public List<TimeSpan> raceTimes;
 
@@ -82,6 +84,7 @@ public class Player : MonoBehaviour
         runData.currentLap = 0;
         runData.maxLaps = 3;
         runData.raceTime = TimeSpan.Parse("00:00:00.000");
+        playerData.bestRaceTime = TimeSpan.Parse("00:00:00.000"); 
         runData.raceTimes = new List<TimeSpan>();
         runData.raceFinished = false;
     }
