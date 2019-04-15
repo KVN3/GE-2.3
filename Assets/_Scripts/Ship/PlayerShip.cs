@@ -24,10 +24,8 @@ public struct PlayerRunData
 public class PlayerShip : Ship
 {
     #region Initialize and Assign Variables
-    //public BulletData bulletData;
     public PlayerRunData runData;
     
-
     private AudioSource audioSource;
     public AudioClip alarmSound;
 

@@ -43,8 +43,8 @@ public class AsteroidStormManager : MonoBehaviour
         {
             if (asteroids.Count < desiredAsteroidCount)
             {
-                int i = Random.Range(0, spawnPointManager.settings.rowLength);
-                int j = Random.Range(0, spawnPointManager.settings.rowLength);
+                int i = Random.Range(0, spawnPointManager.settings.rowLengthX);
+                int j = Random.Range(0, spawnPointManager.settings.rowLengthZ);
 
                 SpawnPoint sp = spawnPoints[i, j];
 
@@ -56,7 +56,7 @@ public class AsteroidStormManager : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
     }
 
