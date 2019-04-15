@@ -9,6 +9,8 @@ public class HUD : MyMonoBehaviour, IObserver
 {
     public Player player { get; set; }
 
+    public UIPanel uiPanel;
+
     Animator Anim;
 
 
@@ -22,6 +24,8 @@ public class HUD : MyMonoBehaviour, IObserver
     // Update is called once per frame
     void Update()
     {
+        //Screen.width;
+
         if (player.runData.raceFinished)
             Anim.SetTrigger("RaceFinished");
     }

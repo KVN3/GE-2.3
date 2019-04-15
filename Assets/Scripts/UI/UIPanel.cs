@@ -20,7 +20,7 @@ public class UIPanel : UIBehaviour
         {
             HUD Hud = GetComponentInParent<HUD>();
 
-            Assert.IsNotNull(Hud, "Bla bla je hebt het verkeerd ingesteld");
+            Assert.IsNotNull(Hud, "Je hebt je hud verkeerd ingesteld");
             Assert.IsNotNull(Hud.player, "Je hebt geen player in je hud");
 
             return Hud.player;
@@ -38,7 +38,7 @@ public class UIPanel : UIBehaviour
     void Update()
     {
         TimeSpan ts = player.runData.raceTime;
-        raceTimeText.text = ts.ToString(@"mm\:ss\.ff");
+        raceTimeText.text = "CURR - " + ts.ToString(@"mm\:ss\.ff");
 
         raceLapText.text = $"Lap: {player.runData.currentLap}/3";
 
