@@ -11,7 +11,13 @@ using UnityEngine.UI;
 public class UIPanel : UIBehaviour
 {
     public TextMeshProUGUI raceTimeText;
+    public TextMeshProUGUI bestRaceTimeText;
+
     public TextMeshProUGUI raceLapText;
+    public TextMeshProUGUI playerSpeedText;
+
+    public Slider chargeBar;
+
     public TextMeshProUGUI raceTimesText;
 
     public PlayerShip PlayerShip
@@ -37,11 +43,29 @@ public class UIPanel : UIBehaviour
 
     void Update()
     {
-        TimeSpan ts = PlayerShip.runData.raceTime;
-        raceTimeText.text = ts.ToString(@"mm\:ss\.ff");
+        #region In-GameUI
 
-        raceLapText.text = $"Lap: {PlayerShip.runData.currentLap}/3";
+        // Laps
+        raceLapText.text = $"Lap: {PlayerShip.runData.currentLap}/{PlayerShip.runData.maxLaps}";
 
+        // Race Time
+        raceTimeText.text = "CURR - " + PlayerShip.runData.raceTime.ToString(@"mm\:ss\.ff");
+
+        // Best race time
+        bestRaceTimeText.text = "BEST - " + PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
+
+        // Speed (Get and convert speed from rb)
+        Rigidbody rb = PlayerShip.GetComponent<Rigidbody>();
+        var localVelocity = transform.InverseTransformDirection(rb.velocity);
+        var forwardSpeed = localVelocity.x;
+        playerSpeedText.text = forwardSpeed.ToString("0.00") + " KM/H";
+
+        // Charges
+        chargeBar.value = PlayerShip.runData.charges;
+
+        #endregion
+
+        #region Race Finished Screen
         // Only show racetimes when finished and display them using a stringbuilder (for lines)
         if (PlayerShip.runData.raceFinished)
         {
@@ -56,6 +80,6 @@ public class UIPanel : UIBehaviour
 
             raceTimesText.text = builder.ToString();
         }
-            
+        #endregion
     }
 }

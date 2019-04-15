@@ -10,6 +10,9 @@ public struct PlayerRunData
     public int currentLap;
     public int maxLaps;
     public TimeSpan raceTime;
+    public TimeSpan bestRaceTime;
+    public TimeSpan totalTime;
+
     public List<TimeSpan> raceTimes;
 
     public bool raceFinished;
@@ -39,6 +42,7 @@ public class PlayerShip : Ship
         runData.currentLap = 0;
         runData.maxLaps = 3;
         runData.raceTime = TimeSpan.Parse("00:00:00.000");
+        runData.bestRaceTime = TimeSpan.Parse("00:00:00.000");
         runData.raceTimes = new List<TimeSpan>();
         runData.raceFinished = false;
     }
