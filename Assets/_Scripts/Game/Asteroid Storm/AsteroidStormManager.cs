@@ -7,8 +7,11 @@ public class AsteroidStormManager : MonoBehaviour
 {
     public int desiredAsteroidCount;
     public Direction direction;
+    public float minAsteroidSize;
+    public float maxAsteroidSize;
 
     public SpawnPointManager spawnPointManager;
+    public SpawnPointManagerSettings SpawnPointManagerSettings;
     public LavaAsteroid[] redLavaAsteroidClasses;
 
     // Currently spawned items
@@ -22,6 +25,7 @@ public class AsteroidStormManager : MonoBehaviour
         Assert.IsNotNull(redLavaAsteroidClasses);
 
         // Initializations
+        spawnPointManager.settings = SpawnPointManagerSettings;
         spawnPoints = spawnPointManager.GenerateSpawnPoints(transform.position);
         asteroids = new List<Asteroid>();
 
@@ -39,8 +43,8 @@ public class AsteroidStormManager : MonoBehaviour
         {
             if (asteroids.Count < desiredAsteroidCount)
             {
-                int i = Random.Range(0, spawnPointManager.rowLength);
-                int j = Random.Range(0, spawnPointManager.rowLength);
+                int i = Random.Range(0, spawnPointManager.settings.rowLength);
+                int j = Random.Range(0, spawnPointManager.settings.rowLength);
 
                 SpawnPoint sp = spawnPoints[i, j];
 
@@ -66,7 +70,7 @@ public class AsteroidStormManager : MonoBehaviour
     {
         LavaAsteroid asteroidClass = redLavaAsteroidClasses[Random.Range(0, redLavaAsteroidClasses.Length)];
         LavaAsteroid asteroid = Instantiate(asteroidClass, spawnPoint.position, Quaternion.identity);
-        asteroid.transform.localScale = asteroid.transform.localScale * Random.Range(0.4f, 2f);
+        asteroid.transform.localScale = asteroid.transform.localScale * Random.Range(minAsteroidSize, maxAsteroidSize);
         asteroid.manager = this;
 
         Floater floater = asteroid.gameObject.AddComponent<Floater>();
