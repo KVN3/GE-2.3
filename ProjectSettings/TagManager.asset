@@ -7,6 +7,8 @@ TagManager:
   - OuterWall
   - BoosterPad
   - Ship
+  - ElectricalExplosion
+  - FinishLine
   layers:
   - Default
   - TransparentFX
