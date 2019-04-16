@@ -24,7 +24,6 @@ public class GameState : MonoBehaviour
     public PlayerShip playerShip;
 
     public GameManagers gameManagers;
-    public Waypoint wp;
     public int difficulty = 0;
 
     // Listeners
@@ -38,18 +37,18 @@ public class GameState : MonoBehaviour
         Assert.IsNotNull(playerShip, "playerShip niet geassigned");
 
         // Spawn Point Manager
-        SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);
+        //SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);
 
         //UIManager
         UIManager UIManager = Instantiate(gameManagers.UIManagerClass);
         UIManager.playerShip = playerShip;
 
         // Asteroid Storm Manager
-        if (difficulty > 0)
-        {
-            AsteroidStormManager asteroidStormManager = Instantiate(gameManagers.asteroidStormManagerClass);
-            asteroidStormManager.spawnPointManager = spawnPointManager;
-        }
+        //if (difficulty > 0)
+        //{
+        //    AsteroidStormManager asteroidStormManager = Instantiate(gameManagers.asteroidStormManagerClass);
+        //    asteroidStormManager.spawnPointManager = spawnPointManager;
+        //}
     }
 
     private void Update()
@@ -76,11 +75,6 @@ public class GameState : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-    }
-
-    public void Marker()
-    {
-        Debug.DrawLine(wp.gameObject.transform.position, this.gameObject.transform.position, Color.green);
     }
 
     public void IncreaseDifficulty()

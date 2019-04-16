@@ -6,25 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class EnergyBall : MonoBehaviour
 {
-    private AudioSource audioSource;
-    public AudioClip chargesZappedClip;
+    public int shutDownDuration = 4;
 
     public void Start()
     {
-        Assert.IsNotNull(chargesZappedClip);
+        //Assert.IsNotNull(chargesZappedClip);
 
-        audioSource = GetComponent<AudioSource>();
+        //audioSource = GetComponent<AudioSource>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ship"))
         {
-            audioSource.clip = chargesZappedClip;
-            audioSource.Play();
-
+            PlayerShip playerShip = other.GetComponent<PlayerShip>();
             Rigidbody rb = other.GetComponent<Rigidbody>();
-            rb.velocity = new Vector3();
+
+            playerShip.GetHitByEmp(shutDownDuration);
         }
     }
 }
