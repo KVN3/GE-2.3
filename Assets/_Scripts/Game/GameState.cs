@@ -35,6 +35,7 @@ public class GameState : MonoBehaviour
         Assert.IsNotNull(gameManagers.UIManagerClass);
         Assert.IsNotNull(gameManagers.spawnPointManagerClass);
         Assert.IsNotNull(gameManagers.asteroidStormManagerClass);
+        Assert.IsNotNull(playerShip, "playerShip niet geassigned");
 
         // Spawn Point Manager
         SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);

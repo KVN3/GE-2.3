@@ -2127,6 +2127,7 @@ MonoBehaviour:
   playerSpeedText: {fileID: 7962651460832975555}
   chargeBar: {fileID: 6904037899225549307}
   raceTimesText: {fileID: 5336807347333047426}
+  ship: {fileID: 1065584707938039308, guid: 936b2f7be1abbac4980dffe0b1a6653e, type: 3}
 --- !u!1 &7498570903428699802
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,6 +20,8 @@ public class UIPanel : UIBehaviour
 
     public TextMeshProUGUI raceTimesText;
 
+    public Ship ship;
+
     public PlayerShip PlayerShip
     {
         get
@@ -55,10 +57,12 @@ public class UIPanel : UIBehaviour
         bestRaceTimeText.text = "BEST - " + PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
 
         // Speed (Get and convert speed from rb)
-        Rigidbody rb = PlayerShip.GetComponent<Rigidbody>();
-        var localVelocity = transform.InverseTransformDirection(rb.velocity);
-        var forwardSpeed = localVelocity.x;
-        playerSpeedText.text = forwardSpeed.ToString("0.00") + " KM/H";
+
+        //Rigidbody rb = PlayerShip.GetComponent<Rigidbody>();
+        //var localVelocity = transform.InverseTransformVector(rb.velocity);
+        //var forwardSpeed = Mathf.Abs(localVelocity.z);
+        //playerSpeedText.text = forwardSpeed.ToString("0") + " KM/H";
+        playerSpeedText.text = ship.currentSpeed.ToString("0") + " KM/H";
 
         // Charges
         chargeBar.value = PlayerShip.runData.charges;
