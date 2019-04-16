@@ -384,23 +384,26 @@ public class Ship : MonoBehaviour
     #region Shooting
     public void Shoot()
     {
-        if (collectableItemClass is JammerProjectile)
+        if (itemAmount > 0)
         {
-            // This object's rotation + 180y
-            Vector3 rot = transform.rotation.eulerAngles;
-            rot = new Vector3(rot.x, rot.y + 180, rot.z);
-            Quaternion rotation = Quaternion.Euler(rot);
+            if (collectableItemClass is JammerProjectile)
+            {
+                // This object's rotation + 180y
+                Vector3 rot = transform.rotation.eulerAngles;
+                rot = new Vector3(rot.x, rot.y + 180, rot.z);
+                Quaternion rotation = Quaternion.Euler(rot);
 
-            JammerProjectile projectile = (JammerProjectile)Instantiate(collectableItemClass, config.projectileSpawnPoint.transform.position, rotation);
-            projectile.owner = this;
+                JammerProjectile projectile = (JammerProjectile)Instantiate(collectableItemClass, config.projectileSpawnPoint.transform.position, rotation);
+                projectile.owner = this;
 
-            PlaySound(SoundType.SHOOTING);
+                PlaySound(SoundType.SHOOTING);
+                itemAmount--;
+            }
         }
     }
     #endregion
 
     #region Sounds
-
     public void PlaySound(SoundType soundType)
     {
         switch (soundType)
@@ -439,14 +442,11 @@ public class Ship : MonoBehaviour
 
         audioSource.Play();
     }
-
     #endregion
 
     #region Collisions and Triggers
     public void GetHitByEmp(int duration)
     {
-        //StartCoroutine(TemporaryShutDown(duration));
-
         if (!IsSystemDown())
         {
             ShutDown();
@@ -482,7 +482,7 @@ public class Ship : MonoBehaviour
 
     private void RestoreSystem()
     {
-        StartCoroutine(FlickerEngines(3));       
+        StartCoroutine(FlickerEngines(3));
     }
 
     private void StartUp()
