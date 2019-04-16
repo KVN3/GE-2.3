@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
         // Controls
         if (Input.GetKeyDown(KeyCode.C))
             useAccelerometerControls = !useAccelerometerControls;
+
+        // Shooting
+        if (Input.GetKeyDown(KeyCode.F))
+            playerShip.Shoot();
     }
 
     void FixedUpdate()
@@ -67,31 +71,38 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement(float horizontalInput, float verticalInput, float forwardFactor, float rotationalFactor)
     {
-        MovementState sideMovementState = Movement.GetMovementState(horizontalInput, MovementType.SIDE);
-
-        // Engines & Drag
-        playerShip.ManageEngines(horizontalInput);
-
-        if (GivingGas(verticalInput) && !Input.GetKey(KeyCode.Space))
-            playerShip.GivingGas();
-        else if (!Input.GetKey(KeyCode.Space))
-            playerShip.NotGivingGas();
-
-        // Rotation
-        if (Movement.IsNotIdle(sideMovementState))
+        if (!playerShip.IsSystemDown())
         {
-            float y = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
-            float z = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
-            playerShip.Rotate(new Vector3(0f, y, z), horizontalInput, sideMovementState);
+            MovementState sideMovementState = Movement.GetMovementState(horizontalInput, MovementType.SIDE);
+
+            // Engines & Drag
+            playerShip.ManageEngines(horizontalInput);
+
+            if (GivingGas(verticalInput) && !Input.GetKey(KeyCode.Space))
+                playerShip.GivingGas();
+            else if (!Input.GetKey(KeyCode.Space))
+                playerShip.NotGivingGas();
+
+            // Rotation
+            if (Movement.IsNotIdle(sideMovementState))
+            {
+                float y = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
+                float z = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
+                playerShip.Rotate(new Vector3(0f, y, z), horizontalInput, sideMovementState);
+            }
+            else
+            {
+                playerShip.ResetAngleZ(1);
+            }
+
+            // Thrust
+            Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.config.movementSpeedFactor * forwardFactor;
+            playerShip.Move(forward, verticalInput, horizontalInput);
         }
         else
         {
-            playerShip.ResetAngleZ(1);
+            playerShip.NotGivingGas();
         }
-
-        // Thrust
-        Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.config.movementSpeedFactor * forwardFactor;
-        playerShip.Move(forward, verticalInput, horizontalInput);
     }
 
     private bool GivingGas(float verticalInput)

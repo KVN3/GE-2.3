@@ -14,6 +14,8 @@ public struct ShipConfig
 
     public float initialAngleY;
     public float initialSlowDownFactor;
+
+    public ProjectileSpawnPoint projectileSpawnPoint;
 }
 
 [System.Serializable]
@@ -31,23 +33,51 @@ public struct Engines
     public Engine rightEngine;
 }
 
+[System.Serializable]
+public struct ShipSounds
+{
+    public AudioClip shutDownClip;
+    public AudioClip restartClip;
+
+    public AudioClip speedBoostClip;
+    public AudioClip alarmClip;
+    public AudioClip[] shootingClips;
+    public AudioClip pickUpClip;
+    public AudioClip lapPassedClip;
+    public AudioClip victoryClip;
+    public AudioClip lossClip;
+}
+
 public class Ship : MonoBehaviour
 {
+    // Config
     public ShipConfig config;
     public ShipFloatConfig floatConfig;
     public Engines shipEngines;
+    public ShipSounds shipSounds;
 
     // Public run data
     public float currentSpeed;
+    public float currentMaxSpeed;
 
     // Private run data
     private float floatTopBound, floatBottomBound;
-    private bool upperBoundReached = false;
+    private bool upperBoundReached;
+    private bool systemsDown;
+    private AudioSource audioSource;
 
-    public float currentMaxSpeed;
+
+
+    // Collectables
+    public Collectable collectableItemClass;
+    public int itemAmount;
+
+
 
     public virtual void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         currentMaxSpeed = config.baseMaxSpeed;
         config.initialAngleY = transform.rotation.eulerAngles.y;
 
@@ -65,7 +95,6 @@ public class Ship : MonoBehaviour
         Rigidbody rb = this.GetComponent<Rigidbody>();
         Vector3 vel = rb.velocity;
         Vector3 localVel = transform.InverseTransformVector(vel);
-
 
         // Get current speed
         currentSpeed = GetCurrentSpeed(vel);
@@ -91,7 +120,7 @@ public class Ship : MonoBehaviour
             rb.AddForce(0, force.y, 0);
         }
 
-        Debug.Log("Vehicle speed (" + localVel.z + ") = " + currentSpeed + " MAX = " + currentMaxSpeed);
+        //Debug.Log("Vehicle speed (" + localVel.z + ") = " + currentSpeed + " MAX = " + currentMaxSpeed);
     }
 
     public float GetCurrentSpeed(Vector3 vel)
@@ -165,7 +194,7 @@ public class Ship : MonoBehaviour
         transform.localEulerAngles = new Vector3(x, y, z);
 
         // Local Vel -> Worldspace Vel
-        vel = transform.TransformVector(localVel); 
+        vel = transform.TransformVector(localVel);
         rb.velocity = vel;
     }
 
@@ -204,6 +233,57 @@ public class Ship : MonoBehaviour
     #endregion
 
     #region Engines
+
+    private IEnumerator FlickerEngines(int times)
+    {
+        SetEnginesRestartMode(true);
+
+        int counter = 0;
+
+        while (counter < times)
+        {
+            TurnOnAllEngines();
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.6f));
+            TurnOffAllEngines();
+            yield return new WaitForSeconds(Random.Range(0.3f, 0.6f));
+
+            counter++;
+        }
+
+        SetEnginesRestartMode(false);
+        StartUp();
+    }
+
+    private void SetEnginesRestartMode(bool isOn)
+    {
+        float startSpeed = .5f;
+        float lifeTime = 2f;
+
+        if (isOn)
+        {
+            startSpeed = 20f;
+            lifeTime = .2f;
+        }
+
+        // Start speed
+        shipEngines.leftEngine.SetStartSpeed(startSpeed);
+        shipEngines.rightEngine.SetStartSpeed(startSpeed);
+        shipEngines.middleEngine.SetStartSpeed(startSpeed);
+
+        // Life time
+        shipEngines.leftEngine.SetLifeTime(lifeTime);
+        shipEngines.rightEngine.SetLifeTime(lifeTime);
+        shipEngines.middleEngine.SetLifeTime(lifeTime);
+
+    }
+
+    private void TurnOnAllEngines()
+    {
+        shipEngines.middleEngine.Activate();
+        shipEngines.leftEngine.Activate();
+        shipEngines.rightEngine.Activate();
+    }
+
     private void TurnOffAllEngines()
     {
         shipEngines.middleEngine.Deactivate();
@@ -299,8 +379,118 @@ public class Ship : MonoBehaviour
     }
     #endregion
 
-    #region Collisions and Triggers
+    #region Shooting
+    public void Shoot()
+    {
+        if (collectableItemClass is JammerProjectile)
+        {
+            // This object's rotation + 180y
+            Vector3 rot = transform.rotation.eulerAngles;
+            rot = new Vector3(rot.x, rot.y + 180, rot.z);
+            Quaternion rotation = Quaternion.Euler(rot);
 
+            JammerProjectile projectile = (JammerProjectile)Instantiate(collectableItemClass, config.projectileSpawnPoint.transform.position, rotation);
+            projectile.owner = this;
+
+            PlaySound(SoundType.SHOOTING);
+        }
+    }
+    #endregion
+
+    #region Sounds
+
+    public void PlaySound(SoundType soundType)
+    {
+        switch (soundType)
+        {
+            case SoundType.SPEEDBOOST:
+                audioSource.clip = shipSounds.speedBoostClip;
+                break;
+            case SoundType.PICKUP:
+                audioSource.clip = shipSounds.pickUpClip;
+                break;
+            case SoundType.ALARM:
+                audioSource.clip = shipSounds.alarmClip;
+                break;
+            case SoundType.SHOOTING:
+                audioSource.clip = shipSounds.shootingClips[Random.Range(0, shipSounds.shootingClips.Length)];
+                break;
+
+            case SoundType.SHUTDOWN:
+                audioSource.clip = shipSounds.shutDownClip;
+                break;
+            case SoundType.RESTART:
+                audioSource.clip = shipSounds.restartClip;
+                break;
+
+            case SoundType.VICTORY:
+                audioSource.clip = shipSounds.victoryClip;
+                break;
+            case SoundType.LOSS:
+                audioSource.clip = shipSounds.lossClip;
+                break;
+            case SoundType.LAPPASSED:
+                audioSource.clip = shipSounds.lapPassedClip;
+                break;
+        }
+
+
+        audioSource.Play();
+    }
+
+    #endregion
+
+    #region Collisions and Triggers
+    public void GetHitByEmp(int duration)
+    {
+        //StartCoroutine(TemporaryShutDown(duration));
+
+        if (!IsSystemDown())
+        {
+            ShutDown();
+            RestoreSystem();
+        }
+    }
+
+    private IEnumerator TemporaryShutDown(int duration)
+    {
+        if (!IsSystemDown())
+        {
+            ShutDown();
+            yield return new WaitForSeconds(duration);
+            RestoreSystem();
+        }
+    }
+
+    public bool IsSystemDown()
+    {
+        return systemsDown;
+    }
+
+    private void ShutDown()
+    {
+        PlaySound(SoundType.SHUTDOWN);
+        systemsDown = true;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.useGravity = true;
+
+        TurnOffAllEngines();
+    }
+
+    private void RestoreSystem()
+    {
+        StartCoroutine(FlickerEngines(3));       
+    }
+
+    private void StartUp()
+    {
+        PlaySound(SoundType.RESTART);
+        systemsDown = false;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
+    }
     #endregion
 }
 

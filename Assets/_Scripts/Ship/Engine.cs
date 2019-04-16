@@ -14,7 +14,7 @@ public class Engine : MonoBehaviour
 
     public void Activate()
     {
-        if(!particleSystem.isPlaying)
+        if (!particleSystem.isPlaying)
             particleSystem.Play();
     }
 
@@ -22,6 +22,18 @@ public class Engine : MonoBehaviour
     {
         if (particleSystem.isPlaying)
             particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+    }
+
+    public void SetStartSpeed(float speed)
+    {
+        ParticleSystem.MainModule pMain = particleSystem.main;
+        pMain.startSpeed = speed;
+    }
+
+    public void SetLifeTime(float lifeTime)
+    {
+        ParticleSystem.MainModule pMain = particleSystem.main;
+        pMain.startLifetime = lifeTime;
     }
 
 }

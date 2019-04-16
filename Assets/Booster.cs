@@ -45,12 +45,10 @@ public class Booster : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ship"))
         {
-            audioSource.clip = boostClip;
-            audioSource.Play();
-
             PlayerShip playerShip = other.GetComponent<PlayerShip>();
             Rigidbody rb = other.GetComponent<Rigidbody>();
 
+            playerShip.PlaySound(SoundType.SPEEDBOOST);
             StartCoroutine(ApplySpeedBoost(playerShip, rb));
         }
     }

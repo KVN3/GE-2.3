@@ -45,14 +45,14 @@ public class PlayerShip : Ship
     #endregion
 
     #region Collisions and Triggers
-    private void OnCollisionEnter(Collision other)
-    {
-        if (!other.gameObject.CompareTag("OuterWall"))
-        {
-            audioSource.clip = alarmClip;
-            audioSource.Play();
-        }
-    }
+    //private void OnCollisionEnter(Collision other)
+    //{
+    //    if (!other.gameObject.CompareTag("OuterWall"))
+    //    {
+    //        audioSource.clip = alarmClip;
+    //        audioSource.Play();
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
