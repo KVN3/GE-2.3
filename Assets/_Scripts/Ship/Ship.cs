@@ -42,10 +42,12 @@ public struct ShipSounds
     public AudioClip speedBoostClip;
     public AudioClip alarmClip;
     public AudioClip[] shootingClips;
-    public AudioClip pickUpClip;
+    public AudioClip[] pickUpClips;
     public AudioClip lapPassedClip;
-    public AudioClip victoryClip;
+
+    public AudioClip[] victoryClips;
     public AudioClip lossClip;
+    public AudioClip achievementClip;
 }
 
 public class Ship : MonoBehaviour
@@ -407,7 +409,7 @@ public class Ship : MonoBehaviour
                 audioSource.clip = shipSounds.speedBoostClip;
                 break;
             case SoundType.PICKUP:
-                audioSource.clip = shipSounds.pickUpClip;
+                audioSource.clip = shipSounds.pickUpClips[Random.Range(0, shipSounds.pickUpClips.Length)];
                 break;
             case SoundType.ALARM:
                 audioSource.clip = shipSounds.alarmClip;
@@ -424,7 +426,7 @@ public class Ship : MonoBehaviour
                 break;
 
             case SoundType.VICTORY:
-                audioSource.clip = shipSounds.victoryClip;
+                audioSource.clip = shipSounds.victoryClips[Random.Range(0, shipSounds.victoryClips.Length)];
                 break;
             case SoundType.LOSS:
                 audioSource.clip = shipSounds.lossClip;
