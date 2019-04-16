@@ -42,7 +42,7 @@ public class PlayerShip : Ship
         runData.currentLap = 0;
         runData.maxLaps = 3;
         runData.raceTime = TimeSpan.Parse("00:00:00.000");
-        runData.bestRaceTime = TimeSpan.Parse("00:00:00.000");
+        //runData.bestRaceTime = TimeSpan.Parse("00:01:47.222");
         runData.raceTimes = new List<TimeSpan>();
         runData.raceFinished = false;
     }
@@ -66,12 +66,14 @@ public class PlayerShip : Ship
             if (runData.raceTimes == null)
                 runData.raceTimes = new List<TimeSpan>();
 
-            // Save lap and reset time if race has started (lap > 0)
+            // Save lap if race has started (lap > 0)
             if (runData.currentLap > 0)
             {
                 // Add laptime to racetimes if not finished
                 if (!runData.raceFinished)
                     runData.raceTimes.Add(runData.raceTime);
+                if (runData.raceTime < runData.bestRaceTime)
+                    runData.bestRaceTime = runData.raceTime;
             }
             // If finished
             if (runData.currentLap == runData.maxLaps) // 3/3 laps + finish

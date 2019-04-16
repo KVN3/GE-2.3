@@ -54,7 +54,10 @@ public class UIPanel : UIBehaviour
         raceTimeText.text = "CURR - " + PlayerShip.runData.raceTime.ToString(@"mm\:ss\.ff");
 
         // Best race time
-        bestRaceTimeText.text = "BEST - " + PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
+        if (PlayerShip.runData.bestRaceTime == TimeSpan.Parse("00:00:00.000"))
+            bestRaceTimeText.text = "--.---";
+        else
+            bestRaceTimeText.text = PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
 
         // Speed (Get and convert speed from rb)
 
@@ -81,6 +84,7 @@ public class UIPanel : UIBehaviour
 
                 builder.Append("Lap ").Append(lapCount).Append(": ").Append(lapTime).AppendLine();
             }
+            builder.Append("Best Lap: ").Append(PlayerShip.runData.bestRaceTime);
 
             raceTimesText.text = builder.ToString();
         }
