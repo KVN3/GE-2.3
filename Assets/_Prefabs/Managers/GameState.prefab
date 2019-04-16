@@ -43,7 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf227bcaf8173884eb69d07f530afd05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  playerShip: {fileID: 1065584707938039308, guid: 936b2f7be1abbac4980dffe0b1a6653e,
+    type: 3}
   gameManagers:
     asteroidStormManagerClass: {fileID: 2057598995073942973, guid: 413e5dc371a4925408826a8aabf3c924,
       type: 3}
@@ -51,4 +52,5 @@ MonoBehaviour:
       type: 3}
     UIManagerClass: {fileID: 9128402878984158466, guid: 6846d0cf1696d144aaf4dd6e60976d31,
       type: 3}
+  wp: {fileID: 0}
   difficulty: 0
