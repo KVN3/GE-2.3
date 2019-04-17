@@ -22,7 +22,7 @@ public class UIManager : LevelSingleton<UIManager>, ISubject
     {
         // Create HUD
         HUD Hud = Spawn(HUDClass, this, (HUD HUD) => {
-            HUD.playerShip = playerShip;
+            HUD.PlayerShip = playerShip;
         });
     }
 

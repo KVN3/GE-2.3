@@ -7,23 +7,24 @@ using UnityEngine.UI;
 
 public class HUD : MyMonoBehaviour, IObserver
 {
-    public PlayerShip playerShip { get; set; }
+    public PlayerShip PlayerShip { get; set; }
 
-    Animator Anim;
+    Animator anim;
+    CanvasGroup canvasGroup;
 
 
     // Start is called before the first frame update
     void Awake() {
-		Assert.IsNotNull(playerShip);
+		Assert.IsNotNull(PlayerShip);
 
-        Anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerShip.runData.raceFinished)
-            Anim.SetTrigger("RaceFinished");
+        if (PlayerShip.runData.raceFinished)
+            anim.SetTrigger("RaceFinished");
     }
 
     public void OnNotify(float score, float charges)
