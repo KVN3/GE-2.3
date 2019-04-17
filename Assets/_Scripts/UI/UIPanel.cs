@@ -65,7 +65,8 @@ public class UIPanel : UIBehaviour
         //var localVelocity = transform.InverseTransformVector(rb.velocity);
         //var forwardSpeed = Mathf.Abs(localVelocity.z);
         //playerSpeedText.text = forwardSpeed.ToString("0") + " KM/H";
-        playerSpeedText.text = ship.currentSpeed.ToString("0") + " KM/H";
+        float currSpeed = ship.components.movement.GetCurrentSpeed();
+        playerSpeedText.text = currSpeed.ToString("0") + " KM/H";
 
         // Charges
         chargeBar.value = PlayerShip.runData.charges;

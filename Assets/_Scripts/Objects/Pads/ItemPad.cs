@@ -10,11 +10,10 @@ public class ItemPad : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ship"))
         {
-            PlayerShip playerShip = other.GetComponent<PlayerShip>();
+            Ship ship = other.GetComponent<PlayerShip>();
 
-            playerShip.PlaySound(SoundType.PICKUP);
-            playerShip.collectableItemClass = itemClasses[Random.Range(0, itemClasses.Length)];
-            playerShip.itemAmount = 1;
+            ship.components.shipSoundManager.PlaySound(SoundType.PICKUP);
+            ship.SetItem(itemClasses[Random.Range(0, itemClasses.Length)], 1);
         }
     }
 }

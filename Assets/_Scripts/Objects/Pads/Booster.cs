@@ -29,7 +29,9 @@ public class Booster : MonoBehaviour
     private IEnumerator ApplySpeedBoost(Ship ship, Rigidbody rb)
     {
         // Increase max speed
-        ship.currentMaxSpeed += maxSpeedIncrease;
+        float currMaxSpeed = ship.components.movement.GetCurrentMaxSpeed();
+        currMaxSpeed += maxSpeedIncrease;
+        ship.components.movement.SetCurrentMaxSpeed(currMaxSpeed);
 
         Vector3 newVelocity = new Vector3(rb.velocity.x * boostFactor, rb.velocity.y, rb.velocity.z * boostFactor);
         rb.velocity = newVelocity;
@@ -37,7 +39,9 @@ public class Booster : MonoBehaviour
         yield return new WaitForSeconds(boostDuration);
 
         // Restore max speed
-        ship.currentMaxSpeed -= maxSpeedIncrease;
+        currMaxSpeed = ship.components.movement.GetCurrentMaxSpeed();
+        currMaxSpeed -= maxSpeedIncrease;
+        ship.components.movement.SetCurrentMaxSpeed(currMaxSpeed);
     }
 
 
@@ -48,7 +52,7 @@ public class Booster : MonoBehaviour
             PlayerShip playerShip = other.GetComponent<PlayerShip>();
             Rigidbody rb = other.GetComponent<Rigidbody>();
 
-            playerShip.PlaySound(SoundType.SPEEDBOOST);
+            playerShip.components.shipSoundManager.PlaySound(SoundType.SPEEDBOOST);
             StartCoroutine(ApplySpeedBoost(playerShip, rb));
         }
     }
