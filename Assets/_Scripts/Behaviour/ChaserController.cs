@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class ChaserController : MonoBehaviour
 {
-    public Enemy enemy;
+    public Chaser chaser;
 
     void Start()
     {
@@ -19,8 +19,8 @@ public class EnemyController : MonoBehaviour
 
     private void HandleMovement()
     {
-        float moveForce = Random.Range(1, enemy.maxForce);
-        enemy.Move(moveForce);
+        float moveForce = Random.Range(1, chaser.maxForce);
+        chaser.Move(moveForce);
     }
 
     //--MOVEMENT--
@@ -35,34 +35,25 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator MoveToTarget(Vector3 target)
     {
-        while (true)
-        {
-            Vector3 diff = target - this.transform.position;
-            enemy.moveDirection = diff.normalized;
+        Vector3 diff = target - this.transform.position;
+        chaser.SetMoveDirection(diff.normalized);
 
-            if (diff.sqrMagnitude < (3 * 3))
-                break;
-
-            yield return new WaitForFixedUpdate();
-        }
+        yield return new WaitForFixedUpdate();
     }
-    //--MOVEMENT--
 
-    //--FIRING--
     IEnumerator PerformFiring()
     {
         while (true)
         {
             yield return new WaitForSeconds(3);
             Vector3 target = FindTarget();
-            enemy.Fire(target);
+            chaser.Fire(target);
         }
     }
-    //--FIRING--
 
     // Methods
     private Vector3 FindTarget()
     {
-        return enemy.PlayerShip.transform.position;
+        return chaser.GetClosestTarget().position;
     }
 }

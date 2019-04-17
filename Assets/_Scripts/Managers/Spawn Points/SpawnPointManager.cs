@@ -13,6 +13,7 @@ public struct SpawnPointManagerSettings
 public class SpawnPointManager : MonoBehaviour
 {
     public SpawnPointManagerSettings settings;
+    public List<LocalSpawnPoint> chaserSpawnPoints;
 
     void Start()
     {

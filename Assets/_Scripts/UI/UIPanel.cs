@@ -61,7 +61,7 @@ public class UIPanel : UIBehaviour
 
         // Speed (Get and convert speed from rb)
 
-        //Rigidbody rb = PlayerShip.GetComponent<Rigidbody>();
+        //Rigidbody rb = target.GetComponent<Rigidbody>();
         //var localVelocity = transform.InverseTransformVector(rb.velocity);
         //var forwardSpeed = Mathf.Abs(localVelocity.z);
         //playerSpeedText.text = forwardSpeed.ToString("0") + " KM/H";

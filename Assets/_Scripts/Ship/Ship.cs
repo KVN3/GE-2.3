@@ -15,7 +15,7 @@ public struct ShipConfig
     public float initialAngleY;
     public float initialSlowDownFactor;
 
-    public ProjectileSpawnPoint projectileSpawnPoint;
+    public LocalSpawnPoint LocalSpawnPoint;
 }
 
 [System.Serializable]
@@ -68,13 +68,9 @@ public class Ship : MonoBehaviour
     private bool systemsDown;
     private AudioSource audioSource;
 
-
-
     // Collectables
     public Collectable collectableItemClass;
     public int itemAmount;
-
-
 
     public virtual void Start()
     {
@@ -393,7 +389,7 @@ public class Ship : MonoBehaviour
                 rot = new Vector3(rot.x, rot.y + 180, rot.z);
                 Quaternion rotation = Quaternion.Euler(rot);
 
-                JammerProjectile projectile = (JammerProjectile)Instantiate(collectableItemClass, config.projectileSpawnPoint.transform.position, rotation);
+                JammerProjectile projectile = (JammerProjectile)Instantiate(collectableItemClass, config.LocalSpawnPoint.transform.position, rotation);
                 projectile.owner = this;
 
                 PlaySound(SoundType.SHOOTING);

@@ -10,6 +10,7 @@ public struct GameManagers
     public AsteroidStormManager asteroidStormManagerClass;
     public SpawnPointManager spawnPointManagerClass;
     public UIManager UIManagerClass;
+    public ChaserManager chaserManagerClass;
 }
 
 [System.Serializable]
@@ -21,7 +22,7 @@ public struct AttachableScripts
 
 public class GameState : MonoBehaviour
 {
-    public PlayerShip playerShip;
+    public PlayerShip[] players;
 
     public GameManagers gameManagers;
     public int difficulty = 0;
@@ -31,17 +32,18 @@ public class GameState : MonoBehaviour
 
     void Start()
     {
+        Assert.IsNotNull(gameManagers.chaserManagerClass);
         Assert.IsNotNull(gameManagers.UIManagerClass);
         Assert.IsNotNull(gameManagers.spawnPointManagerClass);
         Assert.IsNotNull(gameManagers.asteroidStormManagerClass);
-        Assert.IsNotNull(playerShip, "playerShip niet geassigned");
+        Assert.IsNotNull(players, "playerShips niet geassigned");
 
         // Spawn Point Manager
-        //SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);
+        SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);
 
         //UIManager
         UIManager UIManager = Instantiate(gameManagers.UIManagerClass);
-        UIManager.playerShip = playerShip;
+        UIManager.playerShip = players[0];
 
         // Asteroid Storm Manager
         //if (difficulty > 0)
@@ -49,13 +51,18 @@ public class GameState : MonoBehaviour
         //    AsteroidStormManager asteroidStormManager = Instantiate(gameManagers.asteroidStormManagerClass);
         //    asteroidStormManager.spawnPointManager = spawnPointManager;
         //}
+
+        // ChaseManager
+        ChaserManager chaserManager = Instantiate(gameManagers.chaserManagerClass);
+        chaserManager.SetPlayers(players);
+        chaserManager.SetSpawnPoints(spawnPointManager.chaserSpawnPoints);
     }
 
     private void Update()
     {
         // Adds to the laptime based on Time.DeltaTime (A second / fps)
-        if (!playerShip.runData.raceFinished)
-            playerShip.runData.raceTime = playerShip.runData.raceTime.Add(System.TimeSpan.FromSeconds(1 * Time.deltaTime));
+        if (!players[0].runData.raceFinished)
+            players[0].runData.raceTime = players[0].runData.raceTime.Add(System.TimeSpan.FromSeconds(1 * Time.deltaTime));
 
         // Restart, gets particle error tho
         if (Input.GetKeyDown(KeyCode.R))
