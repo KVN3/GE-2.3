@@ -17,5 +17,4 @@ public class ItemPad : MonoBehaviour
             playerShip.itemAmount = 1;
         }
     }
-
 }
