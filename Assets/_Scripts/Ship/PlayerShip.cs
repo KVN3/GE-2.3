@@ -72,8 +72,10 @@ public class PlayerShip : Ship
                 // Add laptime to racetimes if not finished
                 if (!runData.raceFinished)
                     runData.raceTimes.Add(runData.raceTime);
-                if (runData.raceTime < runData.bestRaceTime)
+                if (runData.bestRaceTime == TimeSpan.Parse("00:00:00"))
                     runData.bestRaceTime = runData.raceTime;
+                else if(runData.raceTime < runData.bestRaceTime)
+                        runData.bestRaceTime = runData.raceTime;
             }
             // If finished
             if (runData.currentLap == runData.maxLaps) // 3/3 laps + finish

@@ -14,13 +14,13 @@ public class UIPanel : UIBehaviour
     public TextMeshProUGUI bestRaceTimeText;
 
     public TextMeshProUGUI raceLapText;
-    public TextMeshProUGUI playerSpeedText;
+    public TextMeshProUGUI speedText;
+
+    public Slider speedMeter;
 
     public Slider chargeBar;
 
     public TextMeshProUGUI raceTimesText;
-
-    public Ship ship;
 
     public PlayerShip PlayerShip
     {
@@ -29,9 +29,9 @@ public class UIPanel : UIBehaviour
             HUD Hud = GetComponentInParent<HUD>();
 
             Assert.IsNotNull(Hud, "Bla bla je hebt het verkeerd ingesteld");
-            Assert.IsNotNull(Hud.playerShip, "Je hebt geen playerShip in je hud");
+            Assert.IsNotNull(Hud.PlayerShip, "Je hebt geen playerShip in je hud");
 
-            return Hud.playerShip;
+            return Hud.PlayerShip;
         }
     }
 
@@ -59,13 +59,9 @@ public class UIPanel : UIBehaviour
         else
             bestRaceTimeText.text = PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
 
-        // Speed (Get and convert speed from rb)
-
-        //Rigidbody rb = target.GetComponent<Rigidbody>();
-        //var localVelocity = transform.InverseTransformVector(rb.velocity);
-        //var forwardSpeed = Mathf.Abs(localVelocity.z);
-        //playerSpeedText.text = forwardSpeed.ToString("0") + " KM/H";
-        playerSpeedText.text = ship.currentSpeed.ToString("0") + " KM/H";
+        // Speed
+        speedText.text = PlayerShip.currentSpeed.ToString("0");
+        speedMeter.value = (PlayerShip.currentSpeed / PlayerShip.currentMaxSpeed) * 1;
 
         // Charges
         chargeBar.value = PlayerShip.runData.charges;
@@ -84,7 +80,7 @@ public class UIPanel : UIBehaviour
 
                 builder.Append("Lap ").Append(lapCount).Append(": ").Append(lapTime).AppendLine();
             }
-            builder.Append("Best Lap: ").Append(PlayerShip.runData.bestRaceTime);
+            builder.Append("Best Lap: ").Append(PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff"));
 
             raceTimesText.text = builder.ToString();
         }
