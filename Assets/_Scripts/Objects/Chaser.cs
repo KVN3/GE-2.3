@@ -6,10 +6,11 @@ using UnityEngine;
 public class Chaser : MonoBehaviour
 {
     public EnergyBallProjectile[] energyBallProjectileClasses;
-    public PlayerShip[] targets;
-
     public float maxForce;
     public float minDistance = 400000;
+
+    private ChaserManager manager;
+    private PlayerShip[] targets;
 
     private Vector3 moveDirection;
     private bool isCloseEnough = false;
@@ -28,9 +29,9 @@ public class Chaser : MonoBehaviour
         if (isCloseEnough)
         {
             EnergyBallProjectile projectile = energyBallProjectileClasses[Random.Range(0, energyBallProjectileClasses.Length)];
-            projectile.SetTarget(target);
-
+            
             Instantiate(projectile, this.transform.position, this.transform.rotation);
+            projectile.SetTarget(target);
         }
     }
 
@@ -75,11 +76,23 @@ public class Chaser : MonoBehaviour
         this.moveDirection = moveDirection;
     }
 
+    public void SetManager(ChaserManager manager)
+    {
+        this.manager = manager;
+    }
+
+    public void SetTargets(PlayerShip[] targets)
+    {
+        this.targets = targets;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ship"))
         {
             Destroy(gameObject);
+            manager.RemoveFromAliveChasers(this);
+
         }
     }
 }

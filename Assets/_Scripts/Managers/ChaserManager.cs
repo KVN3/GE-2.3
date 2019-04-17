@@ -42,20 +42,22 @@ public class ChaserManager : MonoBehaviour
 
         if (spawnPoints.Count == 0)
         {
-            foreach(LocalSpawnPoint spawnPoint in spawnPoints)
+            foreach(LocalSpawnPoint spawnPoint in usedSpawnPoints)
                 spawnPoints.Add(spawnPoint);
 
-            foreach (LocalSpawnPoint spawnPoint in usedSpawnPoints)
-                usedSpawnPoints.Remove(spawnPoint);
+            usedSpawnPoints = new List<LocalSpawnPoint>();
         }
+
+        //LocalSpawnPoint[] sps = new LocalSpawnPoint[spawnPoints.Count];
 
         LocalSpawnPoint sp = spawnPoints[Random.Range(0, spawnPoints.Count)];
         spawnPoints.Remove(sp);
         usedSpawnPoints.Add(sp);
 
         Chaser chaser = Instantiate(chaserClass, sp.transform.position, Quaternion.identity);
-        chaser.targets = players;
-
+        chaser.SetTargets(players);
+        chaser.SetManager(this);
+            
         chasers.Add(chaser);
     }
 
@@ -67,5 +69,10 @@ public class ChaserManager : MonoBehaviour
     public void SetSpawnPoints(List<LocalSpawnPoint> spawnPoints)
     {
         this.spawnPoints = spawnPoints;
+    }
+
+    public void RemoveFromAliveChasers(Chaser chaser)
+    {
+        chasers.Remove(chaser);
     }
 }

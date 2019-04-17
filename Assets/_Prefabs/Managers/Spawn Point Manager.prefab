@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings:
-    rowLengthX: 0
-    rowLengthZ: 0
-    spacing: 0
+    rowLengthX: 1
+    rowLengthZ: 1
+    spacing: 1
   chaserSpawnPoints:
   - {fileID: 2873669551035751320, guid: f2b45af41b08c254a82f161faf6e4e6c, type: 3}
   - {fileID: 8980458990804996290, guid: 92b1057746e956948b9353d348772349, type: 3}
