@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class Shooter : EnergyBall
+public class Shooter : MonoBehaviour
 {
     public EnergyBallProjectile[] energyBallProjectileClasses;
     public float minDistance = 400000;
 
-    private ChaserManager manager;
     public PlayerShip[] targets;
 
     private bool isCloseEnough = false;
@@ -65,23 +63,8 @@ public class Shooter : EnergyBall
         return closestTarget;
     }
 
-    public void SetManager(ChaserManager manager)
-    {
-        this.manager = manager;
-    }
-
     public void SetTargets(PlayerShip[] targets)
     {
         this.targets = targets;
-    }
-
-    public override void OnTriggerEnter(Collider other)
-    {
-        base.OnTriggerEnter(other);
-
-        if (other.gameObject.CompareTag("Ship"))
-        {
-            Destroy(gameObject);
-        }
     }
 }

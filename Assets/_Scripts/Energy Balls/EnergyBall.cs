@@ -8,13 +8,6 @@ public class EnergyBall : MonoBehaviour
 {
     public int shutDownDuration = 4;
 
-    public void Start()
-    {
-        //Assert.IsNotNull(chargesZappedClip);
-
-        //audioSource = GetComponent<AudioSource>();
-    }
-
     public virtual void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ship"))

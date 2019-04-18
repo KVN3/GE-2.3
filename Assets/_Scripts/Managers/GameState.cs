@@ -11,6 +11,7 @@ public struct GameManagers
     public SpawnPointManager spawnPointManagerClass;
     public UIManager UIManagerClass;
     public ChaserManager chaserManagerClass;
+    public MoverManager MoverManagerClass;
 }
 
 [System.Serializable]
@@ -38,12 +39,12 @@ public class GameState : MonoBehaviour
         Assert.IsNotNull(gameManagers.asteroidStormManagerClass);
         Assert.IsNotNull(players, "playerShips niet geassigned");
 
-        // Spawn Point Manager
-        SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);
-
         //UIManager
         UIManager UIManager = Instantiate(gameManagers.UIManagerClass);
         UIManager.playerShip = players[0];
+
+        // Spawn Point Manager
+        SpawnPointManager spawnPointManager = Instantiate(gameManagers.spawnPointManagerClass);
 
         // Asteroid Storm Manager
         //if (difficulty > 0)
@@ -52,10 +53,14 @@ public class GameState : MonoBehaviour
         //    asteroidStormManager.spawnPointManager = spawnPointManager;
         //}
 
-        // ChaseManager
+        // Enemy Managers
         ChaserManager chaserManager = Instantiate(gameManagers.chaserManagerClass);
         chaserManager.SetPlayers(players);
         chaserManager.SetSpawnPoints(spawnPointManager.chaserSpawnPoints);
+
+        MoverManager moverManager = Instantiate(gameManagers.MoverManagerClass);
+        moverManager.SetPlayers(players);
+        moverManager.SetSpawnPoints(spawnPointManager.movingSpawnPoints);
     }
 
     private void Update()

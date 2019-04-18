@@ -9,7 +9,7 @@ public class Chaser : EnergyBall
     public float maxForce;
     public float minDistance = 400000;
 
-    private ChaserManager manager;
+    private EnemyManager manager;
     public PlayerShip[] targets;
 
     private Vector3 moveDirection;
@@ -65,7 +65,7 @@ public class Chaser : EnergyBall
         this.moveDirection = moveDirection;
     }
 
-    public void SetManager(ChaserManager manager)
+    public void SetManager(EnemyManager manager)
     {
         this.manager = manager;
     }
@@ -82,7 +82,7 @@ public class Chaser : EnergyBall
         if (other.gameObject.CompareTag("Ship"))
         {
             Destroy(gameObject);
-            manager.RemoveFromAliveChasers(this);
+            manager.RemoveFromAliveEnemies(this);
         }
     }
 }

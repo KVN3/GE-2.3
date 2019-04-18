@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class RandomMovement : MonoBehaviour
+public class RandomMover : EnergyBall
 {
     public float velocidadMax;
+
+    public Shooter shooterModule;
 
     public float xMax;
     public float zMax;
@@ -18,6 +20,7 @@ public class RandomMovement : MonoBehaviour
     private float tiempo;
     private float angulo;
     private Rigidbody rb;
+    private EnemyManager manager;
 
     // Use this for initialization
     void Start()
@@ -80,7 +83,21 @@ public class RandomMovement : MonoBehaviour
         }
 
         rb.AddForce(x, 0f, z);
+    }
 
-       // transform.localPosition = new Vector3(transform.localPosition.x + x, transform.localPosition.y, transform.localPosition.z + z);
+    public void SetManager(EnemyManager manager)
+    {
+        this.manager = manager;
+    }
+
+    public override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+
+        if (other.gameObject.CompareTag("Ship"))
+        {
+            Destroy(gameObject);
+            manager.RemoveFromAliveEnemies(this);
+        }
     }
 }
