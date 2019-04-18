@@ -52,7 +52,7 @@ public class Booster : MonoBehaviour
             PlayerShip playerShip = other.GetComponent<PlayerShip>();
             Rigidbody rb = other.GetComponent<Rigidbody>();
 
-            playerShip.components.shipSoundManager.PlaySound(SoundType.SPEEDBOOST);
+            playerShip.GetShipSoundManager().PlaySound(SoundType.SPEEDBOOST);
             StartCoroutine(ApplySpeedBoost(playerShip, rb));
         }
     }

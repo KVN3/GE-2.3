@@ -15,8 +15,6 @@ public class ShipEngines : ShipComponent
         Assert.IsNotNull(leftEngine);
         Assert.IsNotNull(rightEngine);
         Assert.IsNotNull(parentShip);
-
-        TurnOffAllEngines();
     }
 
     private IEnumerator FlickerEngines(int times)

@@ -13,6 +13,9 @@ public class Engine : MonoBehaviour
     {
         particleSystem = GetComponent<ParticleSystem>();
         audioSource = GetComponent<AudioSource>();
+        audioSource.enabled = false;
+
+        Deactivate();
     }
 
     public void Activate()

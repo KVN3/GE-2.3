@@ -9,7 +9,12 @@ public class SoundManager : MonoBehaviour
 
     public virtual void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        InitializeComponent();
+    }
+
+    public void InitializeComponent()
+    {
+        audioSource = this.GetComponent<AudioSource>();
     }
 
     public virtual void PlaySound(SoundType soundType)

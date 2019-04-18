@@ -86,8 +86,8 @@ public class PlayerController : MonoBehaviour
             // Rotation
             if (Movement.IsNotIdle(sideMovementState))
             {
-                float y = horizontalInput * playerShip.components.movement.movementConfig.rotationSpeedFactor * rotationalFactor;
-                float z = horizontalInput * playerShip.components.movement.movementConfig.rotationSpeedFactor * rotationalFactor;
+                float y = horizontalInput * playerShip.components.movement.config.rotationSpeedFactor * rotationalFactor;
+                float z = horizontalInput * playerShip.components.movement.config.rotationSpeedFactor * rotationalFactor;
                 playerShip.components.movement.Rotate(new Vector3(0f, y, z), horizontalInput, sideMovementState);
             }
             else
@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // Thrust
-            Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.components.movement.movementConfig.movementSpeedFactor * forwardFactor;
+            Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.components.movement.config.movementSpeedFactor * forwardFactor;
             playerShip.components.movement.Move(forward, verticalInput, horizontalInput);
         }
         else

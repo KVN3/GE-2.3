@@ -9,17 +9,17 @@ public struct ShipComponents
     public ShipEngines engines;
     public ShipGun gun;
     public ShipSystem system;
-
-    // Sound Managers
-    public ShipSoundManager shipSoundManager;
-    public LevelSoundManager levelSoundManager;
 }
 
 public class Ship : MonoBehaviour
 {
     public ShipComponents components;
+    public ShipSoundManager shipSoundManagerClass;
+    public LevelSoundManager levelSoundManagerClass;
 
     private List<ShipComponent> componentsList;
+    private ShipSoundManager shipSoundManager;
+    private LevelSoundManager levelSoundManager;
 
     // Collectables
     private Collectable collectableItemClass;
@@ -27,11 +27,10 @@ public class Ship : MonoBehaviour
 
     public virtual void Awake()
     {
-       componentsList = new List<ShipComponent>();
-    }
+        shipSoundManager = Instantiate(shipSoundManagerClass, transform.localPosition, transform.localRotation, this.transform);
 
-    public virtual void Start()
-    {
+        componentsList = new List<ShipComponent>();
+
         componentsList.Add(components.movement);
         componentsList.Add(components.engines);
         componentsList.Add(components.gun);
@@ -40,8 +39,16 @@ public class Ship : MonoBehaviour
         foreach (ShipComponent component in componentsList)
         {
             component.SetParentShip(this);
-            component.SetShipSoundManager(components.shipSoundManager);
+            component.SetShipSoundManager(shipSoundManager);
         }
+
+        //components.shipSoundManager.InitializeComponent();
+        //components.levelSoundManager.InitializeComponent();
+    }
+
+    public virtual void Start()
+    {
+
     }
 
     public void UseItem()
@@ -50,7 +57,7 @@ public class Ship : MonoBehaviour
         {
             if (collectableItemClass is JammerProjectile)
             {
-                components.gun.Shoot((JammerProjectile) collectableItemClass);
+                components.gun.Shoot((JammerProjectile)collectableItemClass);
                 itemAmount--;
             }
         }
@@ -69,6 +76,11 @@ public class Ship : MonoBehaviour
     {
         this.collectableItemClass = item;
         itemAmount = amount;
+    }
+
+    public ShipSoundManager GetShipSoundManager()
+    {
+        return shipSoundManager;
     }
 }
 

@@ -22,7 +22,7 @@ public class UIPanel : UIBehaviour
 
     public TextMeshProUGUI raceTimesText;
 
-    public PlayerShip PlayerShip
+    public PlayerShip playerShip
     {
         get
         {
@@ -48,50 +48,50 @@ public class UIPanel : UIBehaviour
         #region In-GameUI
 
         // Laps
-        raceLapText.text = $"Lap: {PlayerShip.runData.currentLap}/{PlayerShip.runData.maxLaps}";
+        raceLapText.text = $"Lap: {playerShip.runData.currentLap}/{playerShip.runData.maxLaps}";
 
         // Race Time
-        raceTimeText.text = "CURR - " + PlayerShip.runData.raceTime.ToString(@"mm\:ss\.ff");
+        raceTimeText.text = "CURR - " + playerShip.runData.raceTime.ToString(@"mm\:ss\.ff");
 
         // Best race time
-        if (PlayerShip.runData.bestRaceTime == TimeSpan.Parse("00:00:00.000"))
+        if (playerShip.runData.bestRaceTime == TimeSpan.Parse("00:00:00.000"))
             bestRaceTimeText.text = "--.---";
         else
-            bestRaceTimeText.text = PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
+            bestRaceTimeText.text = playerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff");
 
-<<<<<<< HEAD
+
         // Speed (Get and convert speed from rb)
 
         //Rigidbody rb = target.GetComponent<Rigidbody>();
         //var localVelocity = transform.InverseTransformVector(rb.velocity);
         //var forwardSpeed = Mathf.Abs(localVelocity.z);
         //playerSpeedText.text = forwardSpeed.ToString("0") + " KM/H";
-        float currSpeed = ship.components.movement.GetCurrentSpeed();
-        playerSpeedText.text = currSpeed.ToString("0") + " KM/H";
-=======
+        float currSpeed = playerShip.components.movement.GetCurrentSpeed();
+        //playerSpeedText.text = currSpeed.ToString("0") + " KM/H";
+
         // Speed
-        speedText.text = PlayerShip.currentSpeed.ToString("0");
-        speedMeter.value = (PlayerShip.currentSpeed / PlayerShip.currentMaxSpeed) * 1;
->>>>>>> 9a7d018d6d9f829e1f500efba482efdf85998a33
+        speedText.text = currSpeed.ToString("0");
+        speedMeter.value = (currSpeed / playerShip.components.movement.GetCurrentMaxSpeed()) * 1;
+
 
         // Charges
-        chargeBar.value = PlayerShip.runData.charges;
+        chargeBar.value = playerShip.runData.charges;
 
         #endregion
 
         #region Race Finished Screen
         // Only show racetimes when finished and display them using a stringbuilder (for lines)
-        if (PlayerShip.runData.raceFinished)
+        if (playerShip.runData.raceFinished)
         {
             StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < PlayerShip.runData.raceTimes.Count; i++)
+            for (int i = 0; i < playerShip.runData.raceTimes.Count; i++)
             {
-                string lapTime = PlayerShip.runData.raceTimes[i].ToString(@"mm\:ss\.ff");
+                string lapTime = playerShip.runData.raceTimes[i].ToString(@"mm\:ss\.ff");
                 string lapCount = (i + 1).ToString(); // Arrays start at 0 but laps start at 1
 
                 builder.Append("Lap ").Append(lapCount).Append(": ").Append(lapTime).AppendLine();
             }
-            builder.Append("Best Lap: ").Append(PlayerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff"));
+            builder.Append("Best Lap: ").Append(playerShip.runData.bestRaceTime.ToString(@"mm\:ss\.ff"));
 
             raceTimesText.text = builder.ToString();
         }

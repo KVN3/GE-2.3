@@ -12,7 +12,7 @@ public class ItemPad : MonoBehaviour
         {
             Ship ship = other.GetComponent<PlayerShip>();
 
-            ship.components.shipSoundManager.PlaySound(SoundType.PICKUP);
+            ship.GetShipSoundManager().PlaySound(SoundType.PICKUP);
             ship.SetItem(itemClasses[Random.Range(0, itemClasses.Length)], 1);
         }
     }

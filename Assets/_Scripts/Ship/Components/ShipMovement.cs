@@ -25,7 +25,7 @@ public struct ShipMovementConfig
 public class ShipMovement : ShipComponent
 {
     public ShipFloatConfig floatConfig;
-    public ShipMovementConfig movementConfig;
+    public ShipMovementConfig config;
 
     // Run data
     private float currentSpeed;
@@ -36,13 +36,12 @@ public class ShipMovement : ShipComponent
     public void Awake()
     {
         currentSpeed = 0f;
+        
     }
 
     public void Start()
     {
-        currentMaxSpeed = movementConfig.baseMaxSpeed;
-
-
+        currentMaxSpeed = config.baseMaxSpeed;
         InitFloatSettings();
     }
 
@@ -51,7 +50,7 @@ public class ShipMovement : ShipComponent
     {
         Rigidbody rb = parentShip.GetComponent<Rigidbody>();
         Vector3 vel = rb.velocity;
-        Vector3 localVel = transform.InverseTransformVector(vel);
+        Vector3 localVel = parentShip.transform.InverseTransformVector(vel);
 
         // Get current speed
         currentSpeed = GetCurrentSpeed(vel);
@@ -71,7 +70,7 @@ public class ShipMovement : ShipComponent
             if (localVel.z < 0)
                 newLocalVel.z *= -1;
 
-            rb.velocity = transform.TransformVector(newLocalVel);
+            rb.velocity = parentShip.transform.TransformVector(newLocalVel);
 
             // Keep floating, but don't increase speed...
             rb.AddForce(0, force.y, 0);
@@ -82,7 +81,7 @@ public class ShipMovement : ShipComponent
 
     public float GetCurrentSpeed(Vector3 vel)
     {
-        Vector3 localVel = transform.InverseTransformVector(vel);
+        Vector3 localVel = parentShip.transform.InverseTransformVector(vel);
         float currSpeed = localVel.z;
 
         if (localVel.z < 0)
@@ -97,14 +96,14 @@ public class ShipMovement : ShipComponent
 
         parentShip.components.engines.middleEngine.Activate();
 
-        if (rb.drag > movementConfig.minDrag)
+        if (rb.drag > config.minDrag)
             rb.drag -= 0.3f;
 
         if (rb.angularDrag > 0)
             rb.angularDrag -= 0.2f;
 
-        if (rb.drag < movementConfig.minDrag)
-            rb.drag = movementConfig.minDrag;
+        if (rb.drag < config.minDrag)
+            rb.drag = config.minDrag;
     }
 
     public void NotGivingGas()
@@ -113,9 +112,9 @@ public class ShipMovement : ShipComponent
 
         parentShip.components.engines.middleEngine.Deactivate();
 
-        if (rb.drag < movementConfig.maxDrag)
+        if (rb.drag < config.maxDrag)
         {
-            float slowDownFactor = movementConfig.initialSlowDownFactor;
+            float slowDownFactor = config.initialSlowDownFactor;
             if (rb.drag >= 1)
                 slowDownFactor *= rb.drag;
 
@@ -127,10 +126,10 @@ public class ShipMovement : ShipComponent
     {
         Rigidbody rb = parentShip.GetComponent<Rigidbody>();
 
-        if (rb.drag < movementConfig.maxDrag)
+        if (rb.drag < config.maxDrag)
             rb.drag += 0.2f;
 
-        if (rb.angularDrag < movementConfig.maxDrag)
+        if (rb.angularDrag < config.maxDrag)
             rb.angularDrag += 0.2f;
     }
     #endregion
@@ -138,42 +137,42 @@ public class ShipMovement : ShipComponent
     #region Rotation
     public void Rotate(Vector3 acceleration, float horizontalInput, MovementState sideMovementState)
     {
-        Rigidbody rb = GetComponent<Rigidbody>();
+        Rigidbody rb = parentShip.GetComponent<Rigidbody>();
 
         // Worldspace Vel -> Local Vel
         Vector3 vel = rb.velocity;
-        Vector3 localVel = transform.InverseTransformVector(vel);
+        Vector3 localVel = parentShip.transform.InverseTransformVector(vel);
 
         // Rotate
-        float x = transform.localEulerAngles.x;
-        float y = transform.localEulerAngles.y + acceleration.y;
+        float x = parentShip.transform.localEulerAngles.x;
+        float y = parentShip.transform.localEulerAngles.y + acceleration.y;
         float z = GetAngleZ(sideMovementState, acceleration.z);
-        transform.localEulerAngles = new Vector3(x, y, z);
+        parentShip.transform.localEulerAngles = new Vector3(x, y, z);
 
         // Local Vel -> Worldspace Vel
-        vel = transform.TransformVector(localVel);
+        vel = parentShip.transform.TransformVector(localVel);
         rb.velocity = vel;
     }
 
     public void ResetAngleZ(float addValue)
     {
-        float angleZ = transform.localEulerAngles.z;
+        float angleZ = parentShip.transform.localEulerAngles.z;
 
         if (angleZ > 3 && angleZ <= 180)
         {
-            transform.Rotate(0f, 0f, -addValue);
+            parentShip.transform.Rotate(0f, 0f, -addValue);
         }
         else if (angleZ <= 357 && angleZ > 180)
         {
-            transform.Rotate(0f, 0f, addValue);
+            parentShip.transform.Rotate(0f, 0f, addValue);
         }
     }
 
     private float GetAngleZ(MovementState sideMovementState, float addValue)
     {
-        float angleZ = transform.localEulerAngles.z;
+        float angleZ = parentShip.transform.localEulerAngles.z;
 
-        float z = transform.localEulerAngles.z;
+        float z = parentShip.transform.localEulerAngles.z;
 
         if ((angleZ < 20 || angleZ > 300) && sideMovementState.Equals(MovementState.RIGHT))
         {
@@ -201,9 +200,6 @@ public class ShipMovement : ShipComponent
 
         ApplyFloatingBounds();
 
-        //if (floatSpeed == 0)
-        //    Debug.Log("Error... floatSpeed = 0");
-
         return floatSpeed;
     }
 
@@ -211,13 +207,13 @@ public class ShipMovement : ShipComponent
     {
         float diff = Mathf.Round((floatTopBound - floatBottomBound) * 10) / 10;
 
-        if (transform.position.y < (floatBottomBound - diff))
+        if (parentShip.transform.position.y < (floatBottomBound - diff))
         {
-            transform.position = new Vector3(transform.position.x, floatBottomBound, transform.position.z);
+            parentShip.transform.position = new Vector3(parentShip.transform.position.x, floatBottomBound, parentShip.transform.position.z);
         }
-        else if (transform.position.y > (floatTopBound + diff))
+        else if (parentShip.transform.position.y > (floatTopBound + diff))
         {
-            transform.position = new Vector3(transform.position.x, floatTopBound, transform.position.z);
+            parentShip.transform.position = new Vector3(parentShip.transform.position.x, floatTopBound, parentShip.transform.position.z);
         }
     }
 
@@ -230,7 +226,7 @@ public class ShipMovement : ShipComponent
 
     private bool ShouldFloatUp()
     {
-        if (transform.position.y < floatTopBound)
+        if (parentShip.transform.position.y < floatTopBound)
         {
             if (!upperBoundReached)
             {
@@ -244,7 +240,7 @@ public class ShipMovement : ShipComponent
     }
     private bool ShouldFloatDown()
     {
-        if (transform.position.y > floatBottomBound)
+        if (parentShip.transform.position.y > floatBottomBound)
         {
             if (upperBoundReached)
             {
@@ -277,8 +273,8 @@ public class ShipMovement : ShipComponent
     #region Initialisations
     private void InitFloatSettings()
     {
-        floatTopBound = transform.position.y + floatConfig.floatDiff;
-        floatBottomBound = transform.position.y - floatConfig.floatDiff;
+        floatTopBound = parentShip.transform.position.y + floatConfig.floatDiff;
+        floatBottomBound = parentShip.transform.position.y - floatConfig.floatDiff;
     }
     #endregion
 }

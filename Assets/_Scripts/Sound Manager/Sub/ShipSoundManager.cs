@@ -27,7 +27,6 @@ public class ShipSoundManager : SoundManager
                 audioSource.clip = alarmClips[Random.Range(0, alarmClips.Length)];
                 break;
 
-
             case SoundType.SPEEDBOOST:
                 audioSource.clip = speedBoostClips[Random.Range(0, speedBoostClips.Length)];
                 break;
