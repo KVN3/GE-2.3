@@ -300,7 +300,9 @@ public class ShipMovement : ShipComponent
         // Increase max speed & set boost color
         currentMaxSpeed += maxSpeedIncrease;
         parentShip.components.engines.middleEngine.SetBoostColor();
-
+        parentShip.components.engines.leftEngine.SetBoostColor();
+        parentShip.components.engines.rightEngine.SetBoostColor();
+        
         Vector3 newVelocity = new Vector3(rb.velocity.x * boostFactor, rb.velocity.y, rb.velocity.z * boostFactor);
         rb.velocity = newVelocity;
 
@@ -309,6 +311,8 @@ public class ShipMovement : ShipComponent
         // Restore max speed & restore color
         currentMaxSpeed -= maxSpeedIncrease;
         parentShip.components.engines.middleEngine.RestoreColor();
+        parentShip.components.engines.leftEngine.RestoreColor();
+        parentShip.components.engines.rightEngine.RestoreColor();
     }
 
 

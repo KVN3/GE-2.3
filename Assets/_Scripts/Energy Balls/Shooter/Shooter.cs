@@ -3,25 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Chaser : MonoBehaviour
+public class Shooter : EnergyBall
 {
     public EnergyBallProjectile[] energyBallProjectileClasses;
-    public float maxForce;
     public float minDistance = 400000;
 
     private ChaserManager manager;
-    private PlayerShip[] targets;
+    public PlayerShip[] targets;
 
-    private Vector3 moveDirection;
     private bool isCloseEnough = false;
 
-    public void Move(float force)
+    public void FixedUpdate()
     {
-        if (isCloseEnough)
-        {
-            Rigidbody rigidbody = this.GetComponent<Rigidbody>();
-            rigidbody.AddForce(moveDirection * force * Random.Range(0, 2f));
-        }
+        //Debug.Log(targets[0].transform.position);
     }
 
     public void Fire(Vector3 target)
@@ -29,25 +23,25 @@ public class Chaser : MonoBehaviour
         if (isCloseEnough)
         {
             EnergyBallProjectile projectile = energyBallProjectileClasses[Random.Range(0, energyBallProjectileClasses.Length)];
-            
+            projectile.target = target;
+
             Instantiate(projectile, this.transform.position, this.transform.rotation);
-            projectile.SetTarget(target);
         }
     }
 
-    public Transform GetClosestTarget()
+    public Vector3 GetClosestTarget()
     {
         bool isCloseEnough = false;
 
-        Transform closestTarget = this.transform;
+        Vector3 closestTarget = Vector3.zero;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
 
         foreach (PlayerShip target in targets)
         {
-            Transform potentialTarget = target.transform;
+            Vector3 potentialTargetPosition = target.transform.position;
 
-            Vector3 directionToTarget = potentialTarget.position - currentPosition;
+            Vector3 directionToTarget = potentialTargetPosition - currentPosition;
 
             float dSqrToTarget = directionToTarget.sqrMagnitude;
 
@@ -58,7 +52,7 @@ public class Chaser : MonoBehaviour
                 if (closestDistanceSqr < minDistance)
                 {
                     isCloseEnough = true;
-                    closestTarget = potentialTarget;
+                    closestTarget = potentialTargetPosition;
                 }
             }
         }
@@ -71,11 +65,6 @@ public class Chaser : MonoBehaviour
         return closestTarget;
     }
 
-    public void SetMoveDirection(Vector3 moveDirection)
-    {
-        this.moveDirection = moveDirection;
-    }
-
     public void SetManager(ChaserManager manager)
     {
         this.manager = manager;
@@ -86,13 +75,13 @@ public class Chaser : MonoBehaviour
         this.targets = targets;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void OnTriggerEnter(Collider other)
     {
+        base.OnTriggerEnter(other);
+
         if (other.gameObject.CompareTag("Ship"))
         {
             Destroy(gameObject);
-            manager.RemoveFromAliveChasers(this);
-
         }
     }
 }

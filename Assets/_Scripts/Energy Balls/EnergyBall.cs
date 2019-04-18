@@ -15,7 +15,7 @@ public class EnergyBall : MonoBehaviour
         //audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public virtual void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ship"))
         {

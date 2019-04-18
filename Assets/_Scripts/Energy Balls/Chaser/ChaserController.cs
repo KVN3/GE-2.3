@@ -9,7 +9,6 @@ public class ChaserController : MonoBehaviour
     void Start()
     {
         StartCoroutine(PerformMovement());
-        StartCoroutine(PerformFiring());
     }
 
     private void FixedUpdate()
@@ -39,16 +38,6 @@ public class ChaserController : MonoBehaviour
         chaser.SetMoveDirection(diff.normalized);
 
         yield return new WaitForFixedUpdate();
-    }
-
-    IEnumerator PerformFiring()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(3);
-            Vector3 target = FindTarget();
-            chaser.Fire(target);
-        }
     }
 
     // Methods
