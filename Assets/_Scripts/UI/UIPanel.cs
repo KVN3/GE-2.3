@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Localization;
 
 public class UIPanel : UIBehaviour
 {
@@ -48,10 +49,10 @@ public class UIPanel : UIBehaviour
         #region In-GameUI
 
         // Laps
-        raceLapText.text = $"Lap: {playerShip.runData.currentLap}/{playerShip.runData.maxLaps}";
+        raceLapText.text = $"{LocalizationService.Instance.GetTextByKey("LAP")}: {playerShip.runData.currentLap}/{playerShip.runData.maxLaps}";
 
         // Race Time
-        raceTimeText.text = "CURR - " + playerShip.runData.raceTime.ToString(@"mm\:ss\.ff");
+        raceTimeText.text = LocalizationService.Instance.GetTextByKey("CURRENT_TIME") + " - " + playerShip.runData.raceTime.ToString(@"mm\:ss\.ff");
 
         // Best race time
         if (playerShip.runData.bestRaceTime == TimeSpan.Parse("00:00:00.000"))

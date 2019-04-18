@@ -1086,6 +1086,7 @@ GameObject:
   - component: {fileID: 5427809245697640255}
   - component: {fileID: 9083095480191895714}
   - component: {fileID: 6185402341934418258}
+  - component: {fileID: 3698247273557005309}
   m_Layer: 5
   m_Name: PlayerSpeedUnitText
   m_TagString: Untagged
@@ -1236,6 +1237,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3698247273557005309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315717741040972045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1137a3dd71637cb4183ce720f58b1991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key: SPEEDUNIT
 --- !u!1 &3431813086177119502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2335,7 +2349,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -260, y: 54}
+  m_AnchoredPosition: {x: -265.49994, y: 54}
   m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8778633496037626513
@@ -2429,6 +2443,7 @@ GameObject:
   - component: {fileID: 1201873772016134534}
   - component: {fileID: 8664202201321249362}
   - component: {fileID: 4831636963597796999}
+  - component: {fileID: 8872545548013224464}
   m_Layer: 5
   m_Name: UIPanel
   m_TagString: Untagged
@@ -2516,6 +2531,18 @@ MonoBehaviour:
   speedMeter: {fileID: 1005431869637232857}
   chargeBar: {fileID: 6904037899225549307}
   raceTimesText: {fileID: 5336807347333047426}
+--- !u!225 &8872545548013224464
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6578859421687524211}
+  m_Enabled: 1
+  m_Alpha: 0.8
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7498570903428699802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3021,7 +3048,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -122.9, y: 52.1}
+  m_AnchoredPosition: {x: -121.3, y: 54.5}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1005431869637232857
