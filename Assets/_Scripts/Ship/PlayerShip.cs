@@ -14,6 +14,7 @@ public struct PlayerRunData
     public TimeSpan totalTime;
 
     public List<TimeSpan> raceTimes;
+    public List<GameObject> waypoints;
 
     public bool raceFinished;
 
@@ -40,6 +41,7 @@ public class PlayerShip : Ship
         //runData.bestRaceTime = TimeSpan.Parse("00:01:47.222");
         runData.raceTimes = new List<TimeSpan>();
         runData.raceFinished = false;
+        runData.waypoints = new List<GameObject>();
     }
     #endregion
 
@@ -55,6 +57,7 @@ public class PlayerShip : Ship
 
     private void OnTriggerEnter(Collider other)
     {
+        #region FinishLine
         if (other.gameObject.CompareTag("FinishLine"))
         {
             // Fixes an error when racetimes = null after restarting on Gianni's level
@@ -69,8 +72,8 @@ public class PlayerShip : Ship
                     runData.raceTimes.Add(runData.raceTime);
                 if (runData.bestRaceTime == TimeSpan.Parse("00:00:00"))
                     runData.bestRaceTime = runData.raceTime;
-                else if(runData.raceTime < runData.bestRaceTime)
-                        runData.bestRaceTime = runData.raceTime;
+                else if (runData.raceTime < runData.bestRaceTime)
+                    runData.bestRaceTime = runData.raceTime;
             }
             // If finished
             if (runData.currentLap == runData.maxLaps) // 3/3 laps + finish
@@ -79,18 +82,38 @@ public class PlayerShip : Ship
 
                 runData.raceFinished = true;
             }
-            else // Not finished
+            else // If not finished
             {
                 Debug.Log($"playerShip Crossed Finish Line");
 
                 // Reset Time. Only reset when lap > 0 
-                if (runData.currentLap > 0)
+                if (runData.currentLap > 0 && runData.waypoints.Count > 0)
+                {
                     runData.raceTime = TimeSpan.Parse("00:00:00.000");
 
+                    runData.currentLap++;
+
+                    // Reset waypoints
+                    runData.waypoints.Clear();
+                }
+
                 // Add a lap
-                runData.currentLap++;
+                if (runData.currentLap == 0)
+                    runData.currentLap++;
             }
         }
+        #endregion
+
+        #region Waypoints
+
+        if (other.gameObject.CompareTag("Waypoint"))
+        {
+            Debug.Log("Waypoint passed!");
+            //other.GetComponent<Waypoint>().activated = true;
+            runData.waypoints.Add(other.gameObject);
+        }
+
+        #endregion
     }
     #endregion
 }
