@@ -17,6 +17,18 @@ public class ShipEngines : ShipComponent
         Assert.IsNotNull(parentShip);
     }
 
+    public void FixedUpdate()
+    {
+        if (parentShip.components.movement.IsBoosted())
+        {
+            middleEngine.SetBoostColor();
+        }
+        else
+        {
+            middleEngine.RestoreColor();
+        }
+    }
+
     private IEnumerator FlickerEngines(int times)
     {
         SetEnginesRestartMode(true);

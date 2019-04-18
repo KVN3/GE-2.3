@@ -60,6 +60,12 @@ public class Ship : MonoBehaviour
                 components.gun.Shoot((JammerProjectile)collectableItemClass);
                 itemAmount--;
             }
+            else if (collectableItemClass is SpeedBurst)
+            {
+                SpeedBurst speedBurstItem = (SpeedBurst) collectableItemClass;
+                components.movement.ActivateSpeedBoost(speedBurstItem.maxSpeedIncrease, speedBurstItem.boostFactor, speedBurstItem.boostDuration);
+                itemAmount--;
+            }
         }
     }
 
@@ -77,6 +83,9 @@ public class Ship : MonoBehaviour
         this.collectableItemClass = item;
         itemAmount = amount;
     }
+
+    
+
 
     public ShipSoundManager GetShipSoundManager()
     {

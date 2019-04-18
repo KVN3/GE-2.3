@@ -10,6 +10,7 @@ public class MovingObstacle : MonoBehaviour
 
     public float delta = 1.5f;
     public float speed = 2.0f;
+    public bool swapAxis;
 
     private Vector3 startPos;
 
@@ -30,5 +31,23 @@ public class MovingObstacle : MonoBehaviour
             v.y += delta * Mathf.Sin(Time.time * speed);
 
         transform.position = v;
+    }
+
+    private IEnumerator RandomizeRange()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(10);
+            delta = Random.Range(20, delta);
+
+            if (swapAxis)
+            {
+                if (direction == Direction.X)
+                    direction = Direction.Z;
+                else
+                    direction = Direction.X;
+            }
+                
+        }
     }
 }

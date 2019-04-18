@@ -36,7 +36,7 @@ public class ShipMovement : ShipComponent
     public void Awake()
     {
         currentSpeed = 0f;
-        
+
     }
 
     public void Start()
@@ -268,6 +268,14 @@ public class ShipMovement : ShipComponent
     {
         this.currentMaxSpeed = maxSpeed;
     }
+
+    public bool IsBoosted()
+    {
+        if (currentMaxSpeed > config.baseMaxSpeed)
+            return true;
+
+        return false;
+    }
     #endregion
 
     #region Initialisations
@@ -276,5 +284,33 @@ public class ShipMovement : ShipComponent
         floatTopBound = parentShip.transform.position.y + floatConfig.floatDiff;
         floatBottomBound = parentShip.transform.position.y - floatConfig.floatDiff;
     }
+    #endregion
+
+    #region ItemActions
+    public void ActivateSpeedBoost(float maxSpeedIncrease, float boostFactor, float boostDuration)
+    {
+        shipSoundManager.PlaySound(SoundType.SPEEDBOOST);
+        StartCoroutine(ApplySpeedBoost(maxSpeedIncrease, boostFactor, boostDuration));
+    }
+
+    private IEnumerator ApplySpeedBoost(float maxSpeedIncrease, float boostFactor, float boostDuration)
+    {
+        Rigidbody rb = parentShip.GetComponent<Rigidbody>();
+
+        // Increase max speed & set boost color
+        currentMaxSpeed += maxSpeedIncrease;
+        parentShip.components.engines.middleEngine.SetBoostColor();
+
+        Vector3 newVelocity = new Vector3(rb.velocity.x * boostFactor, rb.velocity.y, rb.velocity.z * boostFactor);
+        rb.velocity = newVelocity;
+
+        yield return new WaitForSeconds(boostDuration);
+
+        // Restore max speed & restore color
+        currentMaxSpeed -= maxSpeedIncrease;
+        parentShip.components.engines.middleEngine.RestoreColor();
+    }
+
+
     #endregion
 }

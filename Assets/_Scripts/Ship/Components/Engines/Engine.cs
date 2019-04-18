@@ -5,7 +5,15 @@ using UnityEngine;
 public class Engine : MonoBehaviour
 {
     public ParticleSystem particleSystem;
+
     private AudioSource audioSource;
+
+    private Color originalColor;
+    private float originalSpeed;
+    private float originalLifetime;
+
+    private ParticleSystem.MainModule pMain;
+
     private bool engineOn;
 
     // Start is called before the first frame update
@@ -16,6 +24,16 @@ public class Engine : MonoBehaviour
         audioSource.enabled = false;
 
         Deactivate();
+
+        pMain = particleSystem.main;
+        originalColor = pMain.startColor.color;
+        originalSpeed = pMain.startSpeed.constant;
+        originalLifetime = pMain.startLifetime.constant;
+    }
+
+    public void FixedUpdate()
+    {
+
     }
 
     public void Activate()
@@ -26,7 +44,7 @@ public class Engine : MonoBehaviour
             engineOn = true;
             audioSource.enabled = true;
         }
-            
+
     }
 
     public void Deactivate()
@@ -41,16 +59,30 @@ public class Engine : MonoBehaviour
 
     public void SetStartSpeed(float speed)
     {
-        ParticleSystem.MainModule pMain = particleSystem.main;
         pMain.startSpeed = speed;
     }
 
     public void SetLifeTime(float lifeTime)
     {
-        ParticleSystem.MainModule pMain = particleSystem.main;
         pMain.startLifetime = lifeTime;
     }
 
+    public void SetBoostColor()
+    {
+        pMain.startColor = new Color(0, 191, 0, 255);
+        //StartCoroutine(ClearOldParticles());
 
+    }
 
+    public void RestoreColor()
+    {
+        pMain.startColor = originalColor;
+    }
+
+    private IEnumerator ClearOldParticles()
+    {
+        SetStartSpeed(10);
+        yield return new WaitForSeconds(1);
+        SetStartSpeed(originalSpeed);
+    }
 }
