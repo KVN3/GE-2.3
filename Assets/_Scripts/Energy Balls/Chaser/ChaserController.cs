@@ -18,7 +18,7 @@ public class ChaserController : MonoBehaviour
 
     private void HandleMovement()
     {
-        float moveForce = Random.Range(1, chaser.maxForce);
+        float moveForce = Random.Range(chaser.maxForce - 20, chaser.maxForce);
         chaser.Move(moveForce);
     }
 

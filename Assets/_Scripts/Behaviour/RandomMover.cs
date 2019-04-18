@@ -23,10 +23,11 @@ public class RandomMover : EnergyBall
     private EnemyManager manager;
 
     // Use this for initialization
-    void Start()
+    public override void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        base.Start();
 
+        shooterModule.SetSoundManager(enemySoundManager);
 
         x = Random.Range(-velocidadMax, velocidadMax);
         z = Random.Range(-velocidadMax, velocidadMax);
@@ -37,6 +38,7 @@ public class RandomMover : EnergyBall
     // Update is called once per frame
     void Update()
     {
+        rb = GetComponent<Rigidbody>();
         tiempo += Time.deltaTime;
 
         if (transform.localPosition.x > xMax)
@@ -96,6 +98,7 @@ public class RandomMover : EnergyBall
 
         if (other.gameObject.CompareTag("Ship"))
         {
+            enemySoundManager.PlaySound(SoundType.SHUTDOWN);
             Destroy(gameObject);
             manager.RemoveFromAliveEnemies(this);
         }

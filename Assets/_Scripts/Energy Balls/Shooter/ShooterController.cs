@@ -17,7 +17,7 @@ public class ShooterController : MonoBehaviour
         {
             Vector3 target = shooter.GetClosestTarget();
             shooter.Fire(target);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(Random.Range(1f, 3f));
         }
     }
 }

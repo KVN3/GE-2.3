@@ -25,6 +25,8 @@ public class Ship : MonoBehaviour
     private Collectable collectableItemClass;
     private int itemAmount;
 
+    private bool recentlyHit;
+
     public virtual void Awake()
     {
         shipSoundManager = Instantiate(shipSoundManagerClass, transform.localPosition, transform.localRotation, this.transform);
@@ -62,7 +64,7 @@ public class Ship : MonoBehaviour
             }
             else if (collectableItemClass is SpeedBurst)
             {
-                SpeedBurst speedBurstItem = (SpeedBurst) collectableItemClass;
+                SpeedBurst speedBurstItem = (SpeedBurst)collectableItemClass;
                 components.movement.ActivateSpeedBoost(speedBurstItem.maxSpeedIncrease, speedBurstItem.boostFactor, speedBurstItem.boostDuration);
                 itemAmount--;
             }
@@ -73,9 +75,25 @@ public class Ship : MonoBehaviour
     {
         if (!components.system.IsSystemDown())
         {
-            components.system.ShutDown();
-            components.engines.RestoreSystem();
+            if (!recentlyHit)
+            {
+                components.system.ShutDown();
+                components.engines.RestoreSystem();
+
+                StartCoroutine(GotHit());
+            }
+            else
+            {
+                shipSoundManager.PlaySound(SoundType.PROTECTED);
+            }
         }
+    }
+
+    private IEnumerator GotHit()
+    {
+        recentlyHit = true;
+        yield return new WaitForSeconds(5);
+        recentlyHit = false;
     }
 
     public void SetItem(Collectable item, int amount)
@@ -84,7 +102,7 @@ public class Ship : MonoBehaviour
         itemAmount = amount;
     }
 
-    
+
 
 
     public ShipSoundManager GetShipSoundManager()

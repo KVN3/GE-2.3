@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 107121675254202520}
   - component: {fileID: 107121675254202521}
   - component: {fileID: 5501172819095724943}
+  - component: {fileID: 4671037084046883730}
   m_Layer: 13
   m_Name: Mover Enemy
   m_TagString: EnergyBall
@@ -90,7 +91,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 107121675254202523}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -137,6 +138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shutDownDuration: 4
+  enemySoundManagerClass: {fileID: 7791514189915519896, guid: febd8b341a0717a4286d9b9316fb430f,
+    type: 3}
   velocidadMax: 10
   shooterModule: {fileID: 5501172819638903299}
   xMax: 1300
@@ -144,6 +147,19 @@ MonoBehaviour:
   xMin: 1100
   zMin: -50
   maxSpeed: 20
+--- !u!135 &4671037084046883730
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107121675254202523}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5769759020268333348
 PrefabInstance:
   m_ObjectHideFlags: 0

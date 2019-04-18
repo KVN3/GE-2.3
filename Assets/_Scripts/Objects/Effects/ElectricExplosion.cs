@@ -33,5 +33,10 @@ public class ElectricExplosion : MonoBehaviour
 
             playerShip.GetHitByEmp(shutDownDuration);
         }
+        else if (other.gameObject.CompareTag("EnergyBall"))
+        {
+            EnergyBall energyBall = other.GetComponent<EnergyBall>();
+            energyBall.Die();
+        }
     }
 }
