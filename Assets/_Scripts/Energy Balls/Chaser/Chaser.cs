@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Chaser : EnergyBall
 {
-    public EnergyBallProjectile[] energyBallProjectileClasses;
     public float maxForce;
     public float minDistance = 400000;
 
@@ -20,7 +19,7 @@ public class Chaser : EnergyBall
         if (isCloseEnough)
         {
             Rigidbody rigidbody = this.GetComponent<Rigidbody>();
-            rigidbody.AddForce(moveDirection * force * Random.Range(-5f, 5f));
+            rigidbody.AddForce(moveDirection * force);
         }
     }
 
@@ -81,6 +80,7 @@ public class Chaser : EnergyBall
 
         if (other.gameObject.CompareTag("Ship"))
         {
+            enemySoundManager.PlaySound(SoundType.SHUTDOWN);
             Destroy(gameObject);
             manager.RemoveFromAliveEnemies(this);
         }

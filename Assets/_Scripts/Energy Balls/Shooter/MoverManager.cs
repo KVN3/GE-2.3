@@ -9,13 +9,14 @@ public class MoverManager : EnemyManager
         base.SpawnEnemy();
 
         RandomMover moverClass = enemyClasses[Random.Range(0, enemyClasses.Length)] as RandomMover;
+        moverClass.xMax = sp.xMax;
+        moverClass.xMin = sp.xMin;
+        moverClass.zMax = sp.zMax;
+        moverClass.zMin = sp.zMin;
+        moverClass.maxSpeed = sp.maxSpeed;
         RandomMover mover = Instantiate(moverClass, sp.transform.position, Quaternion.identity);
 
-        mover.xMax = sp.xMax;
-        mover.xMin = sp.xMin;
-        mover.zMax = sp.zMax;
-        mover.zMin = sp.zMin;
-        mover.maxSpeed = sp.maxSpeed;
+        
 
         mover.shooterModule.SetTargets(players);
         mover.SetManager(this);

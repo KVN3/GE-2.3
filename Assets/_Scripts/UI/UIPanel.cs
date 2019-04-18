@@ -74,9 +74,9 @@ public class UIPanel : UIBehaviour
         speedText.text = currSpeed.ToString("0");
         speedMeter.value = (currSpeed / playerShip.components.movement.GetCurrentMaxSpeed()) * 1;
 
-
         // Charges
-        chargeBar.value = playerShip.runData.charges;
+        chargeBar.value =
+            (playerShip.components.forcefield.GetCharges() / playerShip.components.forcefield.maxCharges) * 1;
 
         #endregion
 

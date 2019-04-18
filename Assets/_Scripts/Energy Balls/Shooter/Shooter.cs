@@ -9,17 +9,14 @@ public class Shooter : MonoBehaviour
 
     public PlayerShip[] targets;
 
+    private EnemySoundManager sm;
     private bool isCloseEnough = false;
-
-    public void FixedUpdate()
-    {
-        //Debug.Log(targets[0].transform.position);
-    }
 
     public void Fire(Vector3 target)
     {
         if (isCloseEnough)
         {
+            sm.PlaySound(SoundType.SHOOTING);
             EnergyBallProjectile projectile = energyBallProjectileClasses[Random.Range(0, energyBallProjectileClasses.Length)];
             projectile.target = target;
 
@@ -66,5 +63,10 @@ public class Shooter : MonoBehaviour
     public void SetTargets(PlayerShip[] targets)
     {
         this.targets = targets;
+    }
+
+    public void SetSoundManager(EnemySoundManager sm)
+    {
+        this.sm = sm;
     }
 }

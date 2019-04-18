@@ -7,6 +7,18 @@ using UnityEngine.SceneManagement;
 public class EnergyBall : MonoBehaviour
 {
     public int shutDownDuration = 4;
+    public EnemySoundManager enemySoundManagerClass;
+    protected EnemySoundManager enemySoundManager;
+
+    public virtual void Awake()
+    {
+        enemySoundManager = Instantiate(enemySoundManagerClass, transform.localPosition, transform.localRotation, this.transform);
+    }
+
+    public virtual void Start()
+    {
+        enemySoundManager.PlaySound(SoundType.RESTART);
+    }
 
     public virtual void OnTriggerEnter(Collider other)
     {
@@ -17,5 +29,11 @@ public class EnergyBall : MonoBehaviour
 
             playerShip.GetHitByEmp(shutDownDuration);
         }
+    }
+
+    public virtual void Die()
+    {
+        enemySoundManager.PlaySound(SoundType.SHUTDOWN);
+        Destroy(gameObject);
     }
 }

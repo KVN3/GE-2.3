@@ -124,6 +124,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shutDownDuration: 4
+  enemySoundManagerClass: {fileID: 7791514189915519896, guid: febd8b341a0717a4286d9b9316fb430f,
+    type: 3}
 --- !u!135 &5630456151933992506
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -150,3 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projSpeed: 100
+  inaccuracyX: 10
+  inaccuracyZ: 10
+  target: {x: 0, y: 0, z: 0}

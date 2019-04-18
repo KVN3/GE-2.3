@@ -30,19 +30,30 @@ public class PlayerController : MonoBehaviour
             playerShip.components.movement.Break();
 
         // Controls
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.G))
             useAccelerometerControls = !useAccelerometerControls;
 
         // Shooting
         if (Input.GetKeyDown(KeyCode.F))
             playerShip.UseItem();
+
+        // Forcefield
+        //StartCoroutine(HandleForcefield());
+        if (Input.GetKey(KeyCode.C) && playerShip.components.forcefield.HasEnoughCharges() && !playerShip.components.forcefield.IsOnCooldown())
+        {
+            playerShip.components.forcefield.Activated(true);
+        }
+        else
+        {
+            if(!playerShip.WasRecentlyHit())
+                playerShip.components.forcefield.Deactivated();
+        }
     }
 
     void FixedUpdate()
     {
         HandleMovement();
     }
-
 
     private void HandleMovement()
     {

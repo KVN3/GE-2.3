@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnergyBallProjectile : MonoBehaviour
 {
     public float projSpeed;
+    public float inaccuracyX;
+    public float inaccuracyZ;
 
     public Vector3 target;
     private Vector3 moveDirection;
@@ -14,7 +16,9 @@ public class EnergyBallProjectile : MonoBehaviour
     {
         StartCoroutine(WaitAndDestroy(10));
 
-        Vector3 diff = target - this.transform.position;
+        Vector3 targ = new Vector3(target.x + +Random.Range(-inaccuracyX, inaccuracyX), target.y, target.z + Random.Range(-inaccuracyZ, inaccuracyZ));
+
+        Vector3 diff = targ - this.transform.position ;
         moveDirection = diff.normalized;
     }
 

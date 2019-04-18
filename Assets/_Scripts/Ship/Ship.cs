@@ -9,6 +9,7 @@ public struct ShipComponents
     public ShipEngines engines;
     public ShipGun gun;
     public ShipSystem system;
+    public Forcefield forcefield;
 }
 
 public class Ship : MonoBehaviour
@@ -24,6 +25,8 @@ public class Ship : MonoBehaviour
     // Collectables
     private Collectable collectableItemClass;
     private int itemAmount;
+
+    private bool recentlyHit;
 
     public virtual void Awake()
     {
@@ -62,7 +65,7 @@ public class Ship : MonoBehaviour
             }
             else if (collectableItemClass is SpeedBurst)
             {
-                SpeedBurst speedBurstItem = (SpeedBurst) collectableItemClass;
+                SpeedBurst speedBurstItem = (SpeedBurst)collectableItemClass;
                 components.movement.ActivateSpeedBoost(speedBurstItem.maxSpeedIncrease, speedBurstItem.boostFactor, speedBurstItem.boostDuration);
                 itemAmount--;
             }
@@ -73,9 +76,30 @@ public class Ship : MonoBehaviour
     {
         if (!components.system.IsSystemDown())
         {
-            components.system.ShutDown();
-            components.engines.RestoreSystem();
+            if (!components.forcefield.IsActivate())
+            {
+                components.system.ShutDown();
+                components.engines.RestoreSystem();
+
+                StartCoroutine(GotHit());
+            }
+            else
+            {
+                components.forcefield.GetHit(30);
+                shipSoundManager.PlaySound(SoundType.PROTECTED);
+            }
         }
+    }
+
+    private IEnumerator GotHit()
+    {
+        recentlyHit = true;
+        yield return new WaitForSeconds(1);
+
+        // Temp free forcefield
+        components.forcefield.Activated(false);
+        yield return new WaitForSeconds(4);
+        recentlyHit = false;
     }
 
     public void SetItem(Collectable item, int amount)
@@ -84,7 +108,12 @@ public class Ship : MonoBehaviour
         itemAmount = amount;
     }
 
-    
+    public bool WasRecentlyHit()
+    {
+        if (recentlyHit)
+            return true;
+        return false;
+    }
 
 
     public ShipSoundManager GetShipSoundManager()

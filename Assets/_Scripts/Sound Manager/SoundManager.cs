@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour
     protected AudioSource audioSource;
     protected AudioClip audioClip;
 
-    public virtual void Start()
+    public virtual void Awake()
     {
         InitializeComponent();
     }

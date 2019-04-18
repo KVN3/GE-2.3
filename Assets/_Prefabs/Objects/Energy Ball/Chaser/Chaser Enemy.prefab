@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2155015250968255851}
   - component: {fileID: 5229254442176908686}
   m_Layer: 13
-  m_Name: Energy Ball Chaser
+  m_Name: Chaser Enemy
   m_TagString: EnergyBall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,8 +138,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shutDownDuration: 4
-  energyBallProjectileClasses:
-  - {fileID: 7451226021655218560, guid: a5897aa0a8797064fb2e26b05b205a3a, type: 3}
+  enemySoundManagerClass: {fileID: 7791514189915519896, guid: febd8b341a0717a4286d9b9316fb430f,
+    type: 3}
   maxForce: 40
   minDistance: 400000
   targets: []
