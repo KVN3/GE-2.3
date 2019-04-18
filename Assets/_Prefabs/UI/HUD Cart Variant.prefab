@@ -1096,7 +1096,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -60, y: -26}
+  m_AnchoredPosition: {x: -60, y: -25.99997}
   m_SizeDelta: {x: 30, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1106859161343175259
@@ -2259,6 +2259,7 @@ GameObject:
   - component: {fileID: 8814404640228210653}
   - component: {fileID: 6220266231014798629}
   - component: {fileID: 2431128567636845816}
+  - component: {fileID: 3469569533984726714}
   m_Layer: 5
   m_Name: PlayerSpeedUnitText
   m_TagString: Untagged
@@ -2409,6 +2410,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3469569533984726714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6177114829247051028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1137a3dd71637cb4183ce720f58b1991, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Key: SPEEDUNIT
 --- !u!1 &6182139724423281586
 GameObject:
   m_ObjectHideFlags: 0
