@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
         // Breaking
         if (Input.GetKey(KeyCode.Space))
-            playerShip.Break();
+            playerShip.components.movement.Break();
 
         // Controls
         if (Input.GetKeyDown(KeyCode.C))
@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
         // Shooting
         if (Input.GetKeyDown(KeyCode.F))
-            playerShip.Shoot();
+            playerShip.UseItem();
     }
 
     void FixedUpdate()
@@ -71,37 +71,37 @@ public class PlayerController : MonoBehaviour
 
     private void ApplyMovement(float horizontalInput, float verticalInput, float forwardFactor, float rotationalFactor)
     {
-        if (!playerShip.IsSystemDown())
+        if (!playerShip.components.system.IsSystemDown())
         {
             MovementState sideMovementState = Movement.GetMovementState(horizontalInput, MovementType.SIDE);
 
             // Engines & Drag
-            playerShip.ManageEngines(horizontalInput);
+            playerShip.components.engines.ManageEngines(horizontalInput);
 
             if (GivingGas(verticalInput) && !Input.GetKey(KeyCode.Space))
-                playerShip.GivingGas();
+                playerShip.components.movement.GivingGas();
             else if (!Input.GetKey(KeyCode.Space))
-                playerShip.NotGivingGas();
+                playerShip.components.movement.NotGivingGas();
 
             // Rotation
             if (Movement.IsNotIdle(sideMovementState))
             {
-                float y = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
-                float z = horizontalInput * playerShip.config.rotationSpeedFactor * rotationalFactor;
-                playerShip.Rotate(new Vector3(0f, y, z), horizontalInput, sideMovementState);
+                float y = horizontalInput * playerShip.components.movement.config.rotationSpeedFactor * rotationalFactor;
+                float z = horizontalInput * playerShip.components.movement.config.rotationSpeedFactor * rotationalFactor;
+                playerShip.components.movement.Rotate(new Vector3(0f, y, z), horizontalInput, sideMovementState);
             }
             else
             {
-                playerShip.ResetAngleZ(1);
+                playerShip.components.movement.ResetAngleZ(1);
             }
 
             // Thrust
-            Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.config.movementSpeedFactor * forwardFactor;
-            playerShip.Move(forward, verticalInput, horizontalInput);
+            Vector3 forward = -1 * verticalInput * transform.forward * Time.deltaTime * playerShip.components.movement.config.movementSpeedFactor * forwardFactor;
+            playerShip.components.movement.Move(forward, verticalInput, horizontalInput);
         }
         else
         {
-            playerShip.NotGivingGas();
+            playerShip.components.movement.NotGivingGas();
         }
     }
 

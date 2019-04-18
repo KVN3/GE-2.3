@@ -28,15 +28,10 @@ public class PlayerShip : Ship
 {
     #region Initialize and Assign Variables
     public PlayerRunData runData;
-    
-    private AudioSource audioSource;
-    public AudioClip alarmClip;
-
+  
     public override void Start()
     {
         base.Start();
-
-        audioSource = GetComponent<AudioSource>();
 
         // Set currentlap, maxlaps, timer
         runData.currentLap = 0;
@@ -101,12 +96,12 @@ public class PlayerShip : Ship
 }
 
 // Apply boundaries
-//if (transform.position.x > ShipConfig.rightBound && force.x > 0)
+//if (transform.position.x > ShipComponents.rightBound && force.x > 0)
 //{
 //    rb.velocity = new Vector3(0f, force.y, force.z);
 //}
 
-//else if (transform.position.x < ShipConfig.leftBound && force.x < 0)
+//else if (transform.position.x < ShipComponents.leftBound && force.x < 0)
 //{
 //    rb.velocity = new Vector3(0f, force.y, force.z);
 //}
@@ -132,7 +127,7 @@ public class PlayerShip : Ship
 //        correctedInput = verticalInput * -1;
 //    }
 
-//    Vector3 forward = correctedInput * transform.forward * Time.deltaTime * ShipConfig.movementSpeedFactor;
+//    Vector3 forward = correctedInput * transform.forward * Time.deltaTime * ShipComponents.movementSpeedFactor;
 
 
 //    rb.AddRelativeForce(forward);

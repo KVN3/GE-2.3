@@ -20,7 +20,7 @@ public class Chaser : MonoBehaviour
         if (isCloseEnough)
         {
             Rigidbody rigidbody = this.GetComponent<Rigidbody>();
-            rigidbody.AddForce(moveDirection * force);
+            rigidbody.AddForce(moveDirection * force * Random.Range(0, 2f));
         }
     }
 

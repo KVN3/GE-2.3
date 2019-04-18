@@ -43,7 +43,7 @@ namespace MK.Glass
             public static GUIContent rimIntensity = new GUIContent("Intensity", "Intensity of the rim highlight");
         }
 
-        //hdr config
+        //hdr components
         private ColorPickerHDRConfig colorPickerHDRConfig = new ColorPickerHDRConfig(0f, 99f, 1 / 99f, 3f);
 
         //Editor Properties
