@@ -43,7 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053796e61a41aee4f95d347ea62771bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerShip: {fileID: 4255472754972087945, guid: c1562b43636d61247a6c918d3fe14b5b,
-    type: 3}
-  HUDClass: {fileID: 4596222588877823720, guid: bdd37964a841c4c4dbd008698a9ca89b,
+  playerShip: {fileID: 0}
+  HUDClass: {fileID: 4596222588877823720, guid: 021dce6cacd916e4490bca91f2db801c,
     type: 3}
