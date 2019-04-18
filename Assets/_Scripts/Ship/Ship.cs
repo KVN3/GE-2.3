@@ -9,6 +9,7 @@ public struct ShipComponents
     public ShipEngines engines;
     public ShipGun gun;
     public ShipSystem system;
+    public Forcefield forcefield;
 }
 
 public class Ship : MonoBehaviour
@@ -75,7 +76,7 @@ public class Ship : MonoBehaviour
     {
         if (!components.system.IsSystemDown())
         {
-            if (!recentlyHit)
+            if (!components.forcefield.IsActivate())
             {
                 components.system.ShutDown();
                 components.engines.RestoreSystem();
@@ -84,6 +85,7 @@ public class Ship : MonoBehaviour
             }
             else
             {
+                components.forcefield.GetHit(30);
                 shipSoundManager.PlaySound(SoundType.PROTECTED);
             }
         }
@@ -92,7 +94,11 @@ public class Ship : MonoBehaviour
     private IEnumerator GotHit()
     {
         recentlyHit = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(1);
+
+        // Temp free forcefield
+        components.forcefield.Activated(false);
+        yield return new WaitForSeconds(4);
         recentlyHit = false;
     }
 
@@ -102,7 +108,12 @@ public class Ship : MonoBehaviour
         itemAmount = amount;
     }
 
-
+    public bool WasRecentlyHit()
+    {
+        if (recentlyHit)
+            return true;
+        return false;
+    }
 
 
     public ShipSoundManager GetShipSoundManager()
