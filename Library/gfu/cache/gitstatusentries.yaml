@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 995438498, guid: 68c7e4565cde54155bb78d8e935f1ddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cacheType: 6
+  lastUpdatedAtString: 2019-04-19T06:31:52.982+02:00
+  initializedAtString: 2019-04-19T06:30:48.195+02:00
+  entries:
+  - path: Assembly-CSharp.csproj
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Assembly-CSharp.csproj
+    projectPath: Assembly-CSharp.csproj
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Assembly-CSharp-Editor.csproj
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Assembly-CSharp-Editor.csproj
+    projectPath: Assembly-CSharp-Editor.csproj
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Assembly-CSharp-Editor-firstpass.csproj
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Assembly-CSharp-Editor-firstpass.csproj
+    projectPath: Assembly-CSharp-Editor-firstpass.csproj
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Library\gfu\cache\gitlocks.yaml
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Library\gfu\cache\gitlocks.yaml
+    projectPath: Library\gfu\cache\gitlocks.yaml
+    originalPath: 
+    status: 3
+    staged: 0
+  - path: Library\gfu\cache\gitstatusentries.yaml
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Library\gfu\cache\gitstatusentries.yaml
+    projectPath: Library\gfu\cache\gitstatusentries.yaml
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Library\gfu\cache\gittrackingstatus.yaml
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Library\gfu\cache\gittrackingstatus.yaml
+    projectPath: Library\gfu\cache\gittrackingstatus.yaml
+    originalPath: 
+    status: 3
+    staged: 0
+  - path: Library\shadercompiler-UnityShaderCompiler.exe0.log
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Library\shadercompiler-UnityShaderCompiler.exe0.log
+    projectPath: Library\shadercompiler-UnityShaderCompiler.exe0.log
+    originalPath: 
+    status: 3
+    staged: 0
+  - path: Racing Game G2.3 (10 april merged).sln
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Racing Game G2.3 (10
+      april merged).sln
+    projectPath: Racing Game G2.3 (10 april merged).sln
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Racing Game G2.3.sln
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Racing Game G2.3.sln
+    projectPath: Racing Game G2.3.sln
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Racing Game G2.3.sln.DotSettings.user
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Racing Game G2.3.sln.DotSettings.user
+    projectPath: Racing Game G2.3.sln.DotSettings.user
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\__Backupscenes\0.backup
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Temp\__Backupscenes\0.backup
+    projectPath: Temp\__Backupscenes\0.backup
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\ProcessJobs\e9a6970f79cd12d8b075e7d72f1b07cb.bakert
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Temp\ProcessJobs\e9a6970f79cd12d8b075e7d72f1b07cb.bakert
+    projectPath: Temp\ProcessJobs\e9a6970f79cd12d8b075e7d72f1b07cb.bakert
+    originalPath: 
+    status: 1
+    staged: 0
+  - path: Temp\UnityLockfile
+    fullPath: C:\Users\user\Documents\Unity\Racing Game G2.3\Temp\UnityLockfile
+    projectPath: Temp\UnityLockfile
+    originalPath: 
+    status: 1
+    staged: 0
